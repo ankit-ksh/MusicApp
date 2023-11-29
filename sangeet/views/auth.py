@@ -1,7 +1,7 @@
-# Implementing authorisation and the homepage of music without logged in
+# Implementing authentication
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, redirect, render_template, request, session, url_for
 )
 from sangeet.extensions import db
 
