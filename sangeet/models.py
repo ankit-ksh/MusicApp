@@ -36,17 +36,25 @@ class Creator(User):
     albums = db.relationship('Album', back_populates='artist')
 
 class FlaggedCreator(Creator):
+    flagged_creator_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('creator.id'))
     pass
 
 class Album(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     #relationship with Artist table
-    artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'))
+    artist_id = db.Column(db.Integer, db.ForeignKey('creator.id'))
     artist = db.relationship('Artist', back_populates='albums')
     #_______________________________
     #relationship with Track table
     tracks = db.relationship('Track', back_populates='album')
+
+class FlaggedAlbum(Album):
+    flagged_album_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('album.id'))
+    pass
+
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,7 +63,7 @@ class Track(db.Model):
     genre = db.Column(db.String)
     rating = db.Column(db.Float)
     #relationship with Artist table
-    artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'))
+    artist_id = db.Column(db.Integer, db.ForeignKey('creator.id'))
     artist = db.relationship('Artist', back_populates='tracks')
     #relationship with Album table
     album_id = db.Column(db.Integer, db.ForeignKey('album.id'))
@@ -63,9 +71,11 @@ class Track(db.Model):
     #establish relationshiop with Playlist table
     belongs_to = db.relationship('Playlist', secondary=track_playlist, back_populates='tracks')
     #establish relationship with Lyrics table
-    lyrics = db.association('Lyrics', cascade="all, delete")
+    lyrics = db.relationship('Lyrics', cascade="all, delete")
 
 class FlaggedTrack(Track):
+    flagged_track_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('track.id'))
     pass
 
 class Lyrics(db.Model):
@@ -73,5 +83,6 @@ class Lyrics(db.Model):
     lyrics = db.Column(db.String)
     #establishing relationship with Track table
     track_id = db.Column(db.String, db.ForeignKey('track.id'))
-    track = db.association('Track', back_populates=lyrics)
+    track = db.relationship('Track', back_populates='lyrics')
+
 

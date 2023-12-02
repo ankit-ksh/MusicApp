@@ -8,6 +8,7 @@
     <title>{% block title %}Home{% endblock %} - Music App</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="../static/custom.js"></script>
 </head>
 <body>
     <!-- Header section -->
@@ -19,23 +20,18 @@
                 <!-- Here on there are nav items below -->
                 <div class="ms-sm-5 collapse navbar-collapse" id="nav">
                     <ul class="navbar-nav">
+                        <!-- Nav items home, explore and library, will be populated on respective pages -->
+                        {% block left_nav_options %}
                         <li class="nav-item">
-                            <a class="nav-link active" href="#" aria-current="Music Homepage">Home</a>
+                            <a class="nav-link" href="/user/home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Explore</a>
+                            <a class="nav-link" href="/user/explore">Explore</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Library</a>
+                            <a class="nav-link" href="/user/library">Library</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Profile</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/user/profile">My Profile</a></li>
-                                <li><a class="dropdown-item" href="/user/register_as_creator">Register as Creator</a></li>
-                                <li><a class="dropdown-item" href="/user/preferences">Preferences</a></li>
-                            </ul>
-                        </li>
+                        {% endblock left_nav_options %}
                     </ul>    
                 </div>
                 <!-- search bar -->
@@ -43,16 +39,20 @@
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>    
+                    </form>
                 </div>
-                <!-- sign in and sign up options -->
-                <div>
-                    <a class="btn btn-outline-light" href="/auth/user_login">Sign in</a>
-                    <a class="btn btn-primary" href="/auth/register">Sign up</a>    
+                <!-- Profile details and other options, based on the user type -->
+                <div class="nav-item dropdown dropdown-center">
+                    <img class="show-profile-pic nav-link text-white dropdown-toggle d-inline" data-bs-toggle="dropdown" href="#" role="button" src="../static/images/adele.jpg" alt="">
+                    <ul class="dropdown-menu" data-bs-theme="dark">
+                        <li><a class="dropdown-item" href="/user/profile">My Profile</a></li>
+                        <!-- Anything else that may need to be added based on the user type. For example for user it will be register as creator -->
+                        {% block role_specific_info %}
+                        {% endblock %}
+                        <li><a class="dropdown-item" href="/user/preferences">Preferences</a></li>
+                    </ul>
                 </div>
-                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-label="Expand Navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+
             </div>
         </div>        
         {% endblock %}

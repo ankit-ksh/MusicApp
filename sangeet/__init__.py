@@ -30,6 +30,8 @@ def create_app(test_config=None):
 
     
     # registering the blueprints
+    from .views import general
+    app.register_blueprint(general.bp)
     from .views import auth
     app.register_blueprint(auth.bp)
     from .views import user

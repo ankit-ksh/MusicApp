@@ -1,0 +1,12 @@
+{% extends "user/layout_user_specific.html" %}
+
+{% block auth_status_based_action %}
+<div class="dropdown">
+    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Profile</a>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/user/profile">My Profile</a></li>
+        <li><a class="dropdown-item" href="/user/register_as_creator">Register as Creator</a></li>
+        <li><a class="dropdown-item" href="/user/preferences">Preferences</a></li>
+    </ul>
+</div>
+{% endblock %}

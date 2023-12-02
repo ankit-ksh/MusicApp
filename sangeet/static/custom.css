@@ -15,3 +15,9 @@
 	background-position: 20% 10%;
 	background-size: 100%;
 } */
+
+.show-profile-pic {
+	padding: 0;
+	width: 40px;
+	border-radius: 50%;
+}

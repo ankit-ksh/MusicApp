@@ -4,15 +4,16 @@
 
 {% block left_nav_options %}
 <li class="nav-item">
-    <a class="nav-link active" href="/user/home">Home</a>
+    <a class="nav-link" href="/user/home">Home</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="/user/explore">Explore</a>
+    <a class="nav-link active" href="/user/explore">Explore</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="/user/library">Library</a>
 </li>
 {% endblock %}
+
 
 {% block main %}
 <!-- Tabbed view of Trending and Recommended section -->
@@ -28,12 +29,13 @@
     </ul>
     <!-- Tab Content -->
     <!-- First section Listen again -->
-    <div class="tab-content bg-black bg-gradient container p-3 rounded-3" id="myTabContent">
+    <div class="tab-content bg-black bg-gradient container p-5 rounded-4" id="myTabContent">
         <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" tabindex="0">
             <!-- Looping through all the songs -->
             {% for i in range(5) %}
             <!-- small long items of songs -->
-                <div class="row col-12 m-1 align-items-center justify-content-center bg-light rounded-3">
+                <div class="row col-12 m-1 align-items-center bg-light rounded-3">
+                    <div class="col-1 h1 ">{{loop.index}}</div>
                     <div class="col-3">
                         <div class="lead">Journey to the end</div>
                         <small>EntryType + Artist Name</small>

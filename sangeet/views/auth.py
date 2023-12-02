@@ -8,6 +8,7 @@ from sangeet.extensions import db
 
 bp = Blueprint('auth', __name__, template_folder='templates', static_folder='static', url_prefix='/auth')
 
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     return render_template('auth/register.html')
