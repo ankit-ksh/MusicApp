@@ -1,0 +1,9 @@
+{% from 'general/macros.html' import user_list_of_songs %}
+
+{% block main %}
+
+{{ user_list_of_songs(title="Listen Again") }}
+{{ user_list_of_songs(title="Liked Songs") }}   
+
+
+{% endblock %}

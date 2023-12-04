@@ -1,13 +1,3 @@
-{% extends 'layout_admin_specific_html' %}
+{% extends 'admin/layout_admin_specific.html' %}
 
-{% block left_nav_options %}
-<li class="nav-item">
-    <a class="nav-link" href="/user/home">Home</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/user/explore">Explore</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/user/library">Library</a>
-</li>
-{% endblock %}
+{% set dashboard_link='active' %}

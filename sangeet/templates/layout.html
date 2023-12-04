@@ -12,55 +12,49 @@
 </head>
 <body>
     <!-- Header section -->
-    <header>
+    <nav class="navbar navbar-expand-sm bg-body-secondary nav-underline">
         {% block header %}
-        <div class="nav navbar nav-underline navbar-expand-sm navbar-dark bg-black">
-            <div class="container">
-                <a class="navbar-brand" href="/">Sangeet</a>
-                <!-- Here on there are nav items below -->
-                <div class="ms-sm-5 collapse navbar-collapse" id="nav">
-                    <ul class="navbar-nav">
-                        <!-- Nav items home, explore and library, will be populated on respective pages -->
-                        {% block left_nav_options %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/home">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/explore">Explore</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/library">Library</a>
-                        </li>
-                        {% endblock left_nav_options %}
-                    </ul>    
-                </div>
-                <!-- search bar -->
-                <div class="me-sm-5">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
-                <!-- Profile details and other options, based on the user type -->
-                <div class="nav-item dropdown dropdown-center">
-                    <img class="show-profile-pic nav-link text-white dropdown-toggle d-inline" data-bs-toggle="dropdown" href="#" role="button" src="../static/images/adele.jpg" alt="">
-                    <ul class="dropdown-menu" data-bs-theme="dark">
-                        <li><a class="dropdown-item" href="/user/profile">My Profile</a></li>
-                        <!-- Anything else that may need to be added based on the user type. For example for user it will be register as creator -->
-                        {% block role_specific_info %}
-                        {% endblock %}
-                        <li><a class="dropdown-item" href="/user/preferences">Preferences</a></li>
-                    </ul>
-                </div>
-
+        <div class="container">
+            <a class="navbar-brand" href="/">Sangeet <sub style="font-size:50%;">{{user_type_navbrand_subscript}}</sub></a>
+            <!-- Here on there are nav items below -->
+            <ul class="navbar-nav me-auto ms-5 mb-2 mb-lg-0">
+                <!-- Nav items home, explore and library, will be populated on respective pages -->
+                <li class="nav-item">
+                    <a class="nav-link {{home_link}}" href="/{{user_type}}/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{explore_link}}" href="/{{user_type}}/explore">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{library_link}}" href="/{{user_type}}/library">Library</a>
+                </li>
+                {% block extra_left_nav_options %}
+                {% endblock extra_left_nav_options %}
+            </ul>
+            <!-- search bar -->
+            <form class="d-flex me-5" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <!-- Profile details and other options, based on the user type -->
+            <div class="nav-item dropdown">
+                <img class="show-profile-pic nav-link text-white dropdown-toggle d-inline" data-bs-toggle="dropdown" href="#" role="button" src="../static/images/adele.jpg" alt="">
+                <ul class="dropdown-menu dropdown-menu-end" data-bs-theme="dark">
+                    <li><a class="dropdown-item" href="/{{user_type}}/profile">My Profile</a></li>
+                    <!-- Anything else that may need to be added based on the user type. For example for user it will be register as creator -->
+                    {% block role_specific_info %}
+                    {% endblock %}
+                    <li><a class="dropdown-item" href="/{{user_type}}/preferences">Preferences</a></li>
+                    <li><a href="#" class="dropdown-item">Logout</a></li>
+                </ul>
             </div>
         </div>        
         {% endblock %}
-    </header>
+    </nav>
 
 
     <!-- Main section -->
-    <main>
+    <main class="container">
         {% block main %}
         {% endblock %}
     </main>

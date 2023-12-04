@@ -19,28 +19,28 @@
       <!-- registration form -->
       <!-- custom style below -->
       <div class="col-lg-4"> 
-        <form class="vstack gap-2">
+        <form action="/user/register" method="post" class="vstack gap-2">
           <div class="text-center">
             <h1>Sign up</h1>
           </div>  
           <div class="form-floating">
-            <input class="form-control" id="username" placeholder="username" type="text" required>
+            <input class="form-control" id="username" name="user_name" placeholder="username" type="text" required>
             <label class="form-label" for="username">Username</label>
           </div>
           
           <div class="hstack gap-2">
             <div class="form-floating">
-                <input class="form-control" id="first_name" placeholder="First Name" type="text" required>
+                <input class="form-control" id="first_name" name="first_name" placeholder="First Name" type="text" required>
                 <label class="form-label" for="first_name">First Name</label>
             </div>
             <div class="form-floating">
-              <input class="form-control" id="last_name" placeholder="Last Name" type="text">
+              <input class="form-control" id="last_name" name="last_name" placeholder="Last Name" type="text">
               <label class="form-label" for="last_name">Last Name <em style="font-size: 0.6em;">(Optional)</em></label> 
             </div>
           </div>
 
           <div class="form-floating">
-            <input class="form-control" type="password" placeholder="Password" id="pwd" required>
+            <input class="form-control" type="password" placeholder="Password" id="pwd" name="password" required>
             <label class="form-label" for="pwd">Password</label>
           </div>
           

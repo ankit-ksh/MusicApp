@@ -1,85 +1,8 @@
 {% extends "user/layout_user_specific.html" %}
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-{% block left_nav_options %}
-<li class="nav-item">
-    <a class="nav-link active" href="/user/home">Home</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/user/explore">Explore</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/user/library">Library</a>
-</li>
-{% endblock %}
+{% set home_link = 'active' %}
 
 {% block main %}
-<!-- Tabbed view of Trending and Recommended section -->
-<div class="hero-area pt-4 px-5">
-    <!-- Tab links -->
-    <ul class="nav nav-underline p-3" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Listen Again</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Trending</button>
-        </li>  
-    </ul>
-    <!-- Tab Content -->
-    <!-- First section Listen again -->
-    <div class="tab-content bg-black bg-gradient container p-3 rounded-3" id="myTabContent">
-        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" tabindex="0">
-            <!-- Looping through all the songs -->
-            {% for i in range(5) %}
-            <!-- small long items of songs -->
-                <div class="row col-12 m-1 align-items-center justify-content-center bg-light rounded-3">
-                    <div class="col-3">
-                        <div class="lead">Journey to the end</div>
-                        <small>EntryType + Artist Name</small>
-                    </div>
-                    <div class="col-8">
-                        <form class="d-flex justify-content-evenly" action="#">
-                            <!-- Player for the song -->
-                            <audio id="player"src="../../static/audio/Rang.mp3"></audio>
-                            <div>
-                                <button class="btn btn-outline-success" onclick="document.getElementById('player').play(); "document.getElementById('player').('hello')"">Play</button>
-                                <button class="btn btn-outline-danger" onclick="document.getElementById('player').pause()">Pause</button>
-                                <button class="btn btn-outline-primary" onclick="document.getElementById('player').muted=!document.getElementById('player').muted">Mute/ Unmute</button>
-                            </div>        
-                            <!-- for collecting the rating of the song -->
-                            <div>
-                                <select class="btn btn-secondary" name="rating" id="rating">
-                                    <option value="">?</option>
-                                    {% for i in range(1, 6) %}
-                                    <option value="{{i}}">{{i}} *</option>
-                                    {% endfor %}
-                                </select>
-                                <input class="btn btn-primary" formaction="/user/rating" type="submit" value="Rate">
-                            </div>
-                            <!-- for adding the song to a specific playlist -->
-                            <div>
-                                <select class="btn btn-secondary" name="add_to_playlist" id="add_to_playlist">
-                                    <option value="Add to Playlist">Choose Playlist</option>
-                                    {% for playlist in my_playlists %}
-                                        <option value="{{playlist}}">{{playlist}}</option>
-                                    {% endfor %}
-                                </select>
-                                <input class="btn btn-primary" formaction="/user/add_to_playlist" type="submit" value="Add">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            <!-- end long items of songs -->
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-            Second Section
-        </div>
-    </div>
-</div>
 
+{% include 'general/home.html' %}
 
 {% endblock %}
-
-

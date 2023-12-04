@@ -1,1 +1,38 @@
 {% extends 'layout.html' %}
+{% set user_type="creator" %}
+{% set user_type_navbrand_subscript="Studio" %}
+
+
+<!-- Dropdown of user profile photo -->
+{% block role_specific_info %}
+<li><a class="dropdown-item" href="/creator/become_normal_user">Go Back as Normal User</a></li>
+{% endblock %}
+
+
+<!-- Extra left navigation links for the Admin -->
+{% block extra_left_nav_options %}
+<li class="nav-item">
+  <a class="nav-link {{dashboard_link}}" href="/creator/dashboard">Dashboard</a>
+</li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      My Content
+    </a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Songs</a></li>
+      <li><a class="dropdown-item" href="#">Lyrics</a></li>
+      <li><a class="dropdown-item" href="#">Albums</a></li>
+    </ul>
+</li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Upload
+    </a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Songs</a></li>
+      <li><a class="dropdown-item" href="#">Lyrics</a></li>
+      <li><a class="dropdown-item" href="#">Albums</a></li>
+    </ul>
+</li>
+{% endblock extra_left_nav_options %}
+

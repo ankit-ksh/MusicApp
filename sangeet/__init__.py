@@ -36,5 +36,10 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     from .views import user
     app.register_blueprint(user.bp)
+    from .views import creator
+    app.register_blueprint(creator.bp)
+    from .views import admin
+    app.register_blueprint(admin.bp)
+
 
     return app
