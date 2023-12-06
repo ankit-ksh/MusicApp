@@ -32,10 +32,8 @@ def login():
         alredy_user = db.session.execute(db.select(User).where(User.user_name == user_name)).scalar()
         if alredy_user:
             if password == alredy_user.password:
-                role = alredy_user.role
-                endpoint = f"{role}.home"
                 login_user(alredy_user)
-                return redirect(url_for(endpoint))
+                return redirect(url_for('general.home'))
             else:
                 flash('Incorrect Password!', 'error')
         else:

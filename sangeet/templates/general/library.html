@@ -1,7 +1,9 @@
-{% from 'general/macros.html' import user_list_of_songs %}
+{% extends 'layouts/layout.html' %}
+{% import 'macros/group_of_content.html' as group_of_content %}
+{% set library_link = 'active' %}
 
 {% block main %}
 
-{{ user_list_of_songs() }}
+{{ group_of_content.song_list_overview(current_user=current_user, title='Liked Songs') }}
 
 {% endblock %}

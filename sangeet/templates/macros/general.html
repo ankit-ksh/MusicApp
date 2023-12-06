@@ -1,0 +1,16 @@
+<!-- Macro for getting flashed messages to show up with a defined color -->
+{% macro flash_message() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes list-unstyled">
+        {% for category, message in messages %}
+            {% if category == 'error' %}
+                <li class="alert alert-danger">{{ message }}</li>
+            {% elif category == 'success' %}
+                <li class="alert alert-success">{{ message }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endwith %}
+{% endmacro %}

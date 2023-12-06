@@ -1,0 +1,43 @@
+<!-- row of a track in general user's context -->
+
+{% macro user_row_of_track(song, current_user) %}
+<div class="row gap-3 justify-content-evenly align-items-center p-2 m-2 bg-success-subtle rounded-2">
+    <div class="col lead">
+        {{song.name}}
+    </div>
+    <div class="col">
+        <form class="hstack gap-3" action="#">
+            <!-- Player for the song -->
+            <audio id="player"src="#"></audio>
+            <div>
+                <div class="hstack gap-1 justify-content-evenly align-items-center">
+                    <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').play(); "document.getElementById('player').('hello')"">Play</button>
+                    <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').pause()">Pause</button>
+                    <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').muted=!document.getElementById('player').muted">Lyrics</button>
+                </div>            
+            </div>    
+            <!-- for collecting the rating of the song -->
+            <div class="hstack gap-1">
+                <select class="col btn btn-sm btn-secondary" name="rating" id="rating">
+                    <option value="">?</option>
+                    {% for i in range(1, 6) %}
+                    <option value="{{i}}">{{i}} *</option>
+                    {% endfor %}
+                </select>
+                <input class="btn btn-sm btn-primary" formaction="/user/rating" type="submit" value="Rate">
+            </div>
+            <!-- for adding the song to a specific playlist -->
+            <div class="col hstack gap-1">
+                <select class="btn btn-sm btn-secondary" name="add_to_playlist" id="add_to_playlist">
+                    <option value="Add to Playlist">Choose Playlist</option>
+                    {% for playlist in current_user.playlists %}
+                        <option value="{{playlist}}">{{playlist.name}}</option>
+                    {% endfor %}
+                </select>
+                <input class="btn btn-sm btn-primary" formaction="/user/add_to_playlist" type="submit" value="Add">
+            </div>
+        </form>    
+    </div>
+</div>
+
+{% endmacro %}

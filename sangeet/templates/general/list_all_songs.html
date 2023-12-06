@@ -1,0 +1,9 @@
+{% extends 'layouts/layout.html' %}
+{% import 'macros/group_of_content.html' as group_of_content %}
+
+{% block main %}
+
+<!-- This template will get a songs list based on the endpoint and its job is just to show the list -->
+{{ group_of_content.list_all_songs(title=title, songs=songs, current_user=current_user) }}
+
+{% endblock %}

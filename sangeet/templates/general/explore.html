@@ -1,10 +1,13 @@
-{% from 'general/macros.html' import user_list_of_songs %}
+{% extends 'layouts/layout.html' %}
+{% import 'macros/group_of_content.html' as group_of_content %}
+{% set explore_link = 'active' %}
 
 {% block main %}
 
-{{ user_list_of_songs(title="Trending") }}
-{{ user_list_of_songs(title="Genres") }}
-{{ user_list_of_songs(title="Regional Hits") }}
-
+{{ group_of_content.song_list_overview(current_user=current_user, title="English", list_type='english') }}
+{{ group_of_content.song_list_overview(current_user=current_user, title="Hindi", list_type='regional') }}
+{{ group_of_content.song_list_overview(current_user=current_user, title="Regional", list_type='regional') }}
+{{ group_of_content.song_list_overview(current_user=current_user, title="Romantic", list_type='romantic') }}
+{{ group_of_content.song_list_overview(current_user=current_user, title="Devotional Melodies", list_type='devotional') }}
 
 {% endblock %}

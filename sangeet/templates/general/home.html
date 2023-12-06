@@ -1,9 +1,12 @@
-{% from 'general/macros.html' import user_list_of_songs %}
+{% extends 'layouts/layout.html' %}
+{% import 'macros/group_of_content.html' as group_of_content %}
+{% set home_link = 'active' %}
+
 
 {% block main %}
 
-{{ user_list_of_songs(title="Listen Again") }}
-{{ user_list_of_songs(title="Liked Songs") }}   
+{{ group_of_content.song_list_overview(current_user=current_user, title="Trendin on Sangeet", list_type='trending') }}
+{{ group_of_content.song_list_overview(current_user=current_user, title="All Songs on Sangeet", list_type='all') }}
 
 
 {% endblock %}
