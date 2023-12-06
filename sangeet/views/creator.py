@@ -4,11 +4,17 @@ from flask import (
     Blueprint, redirect, render_template, request, session, url_for
 )
 from sangeet.extensions import db
+from flask_login import (
+    login_user,
+    logout_user,
+    login_required,
+)
 
 bp = Blueprint('creator', __name__, template_folder='templates', static_folder='static', url_prefix='/creator')
 
 
 @bp.route('/home')
+@login_required
 def home():
     return render_template('creator/home.html')
 

@@ -1,12 +1,20 @@
 import os
 from flask import Flask
 from .extensions import db
+from .extensions import login_manager
+# Followig import is for getting the user object for the user loader of flask login LoginManager
+from sangeet.models import User
 
 
 
 def create_app(test_config=None):
     # creating the flask app as an instance of the Flask Class
     app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        SQLALCHEMY_DATABASE_URI = "sqlite:///sangeet.sqlite3",
+    )
+
 
     # ensure instance folder exists
     try:
@@ -15,11 +23,18 @@ def create_app(test_config=None):
         pass
     
     # initialising database, if required
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sangeet.sqlite3"
     db.init_app(app)
     from . import models
     with app.app_context():
         db.create_all()
+
+    # configuring flask login
+    login_manager.init_app(app)
+    #loading the user
+    @login_manager.user_loader
+    def load_user(user_id):
+        return db.session.get(User, int(user_id))
+
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -30,8 +45,6 @@ def create_app(test_config=None):
 
     
     # registering the blueprints
-    from .views import general
-    app.register_blueprint(general.bp)
     from .views import auth
     app.register_blueprint(auth.bp)
     from .views import user
