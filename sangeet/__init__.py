@@ -13,6 +13,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI = "sqlite:///sangeet.sqlite3",
+        SQLALCHEMY_TRACK_MODIFICATIONS = True # False in production to increase performance, True in development for reloading without restarting the server
     )
 
 
@@ -24,7 +25,7 @@ def create_app(test_config=None):
     
     # initialising database, if required
     db.init_app(app)
-    from . import models
+    # from . import models
     with app.app_context():
         db.create_all()
 

@@ -1,6 +1,6 @@
 <!-- Overview of List of Songs for users on home, library and explore pages-->
 {% import 'macros/unit_content.html' as unit_content %}
-{% macro song_list_overview(current_user, title='Title', list_type='all') %}
+{% macro song_list_overview(current_user, songs, title='Title', list_type='all') %}
 <div class="container mt-5 border border-1 rounded-2 border-dark p-3">
             <div class="hstack px-2">
                 <h3 class="rounded-3 bg-danger-subtle p-2">{{title}}</h3>
@@ -9,7 +9,7 @@
         <!-- Looping through all the songs -->
         {% for song in songs %}
             <!-- small long items of songs -->
-            {{ unit_content.user_row_of_track(song, current_user) }}
+            {{ unit_content.user_row_of_track(song=song, current_user=current_user) }}
             <!-- end long items of songs -->
         {% endfor %}
 </div>

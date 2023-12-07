@@ -22,16 +22,18 @@ def home():
 
 @bp.route('/explore')
 def explore():
+    songs = {}
     # fetching overview for english tracks
     # query_result = db.session.execute(db.select(User).where(Track.language == 'english').limit(5)).scalars()
     # fetching overview for hindi tracks
-    query_result = db.session.execute(db.select(User).where(Track.language == 'hindi').limit(5)).scalars()
+    # query_result = db.session.execute(db.select(User).where(Track.language == 'hindi').limit(5)).scalars()
     # fetching overview for Pop tracks
-    query_result = db.session.execute(db.select(User).where(Track.language == 'english').limit(5)).scalars()
+    query_result = db.session.execute(db.select(Track).where(Track.genre == 'pop').limit(5)).scalars()
+    pop = [result for result in query_result]
+    songs['pop'] = pop
     # fetching overview for english tracks
-    query_result = db.session.execute(db.select(User).where(Track.language == 'english').limit(5)).scalars()
-
-    return render_template('general/explore.html')
+    # query_result = db.session.execute(db.select(User).where(Track.language == 'english').limit(5)).scalars()
+    return render_template('general/explore.html', songs=songs)
 
 @bp.route('/library')
 def library():

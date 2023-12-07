@@ -11,8 +11,9 @@ login_manager.blueprint_login_views = {
 }
 login_manager.login_message = 'You Need to Log in!'
 
-
-
+# # extension flask migration for tracking changes in the database (NOT ABLE TO MAKE IT WORK)
+# from flask_migrate import Migrate
+# migrate = Migrate()
 
 
 
