@@ -14,7 +14,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI = "sqlite:///sangeet.sqlite3",
         SQLALCHEMY_TRACK_MODIFICATIONS = True, # False in production to increase performance, True in development for reloading without restarting the server
-        TEMPLATES_AUTO_RELOAD = True
+        # TEMPLATES_AUTO_RELOAD = True
     )
 
 
