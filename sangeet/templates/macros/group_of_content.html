@@ -1,31 +1,33 @@
 <!-- Overview of List of Songs for users on home, library and explore pages-->
-{% import 'macros/unit_content.html' as unit_content %}
-{% macro song_list_overview(current_user, songs, title='Title', list_type='all') %}
+{% import 'macros/unit_content.html' as unit_content with context %}
+
+
+{% macro track_list_overview(current_user, tracks, title='Title', list_type='all') %}
 <div class="container mt-5 border border-1 rounded-2 border-dark p-3">
             <div class="hstack px-2">
                 <h3 class="rounded-3 bg-danger-subtle p-2">{{title}}</h3>
                 <a href="/music/{{list_type}}" class="rounded-3 bg-primary-subtle p-2 lead link-dark ms-auto pe-3">More</a>
             </div>
         <!-- Looping through all the songs -->
-        {% for song in songs %}
+        {% for track in tracks %}
             <!-- small long items of songs -->
-            {{ unit_content.user_row_of_track(song=song, current_user=current_user) }}
+            {{ unit_content.row_of_track(track, current_user, var) }}
             <!-- end long items of songs -->
         {% endfor %}
 </div>
 {% endmacro %}
 
-<!-- List all songs for a user of any particular category -->
-{% macro list_all_songs(songs, current_user, title='Title') %}
+<!-- List all songs for everyone of any particular category -->
+{% macro list_provided_tracks(role_specific_actions) %}
 <div class="container mt-5 border border-1 rounded-2 border p-3">
             <div class="hstack px-2">
                 <h3 class="rounded-3 bg-danger-subtle p-2">{{title}}</h3>
                 <!-- <a href="#" class="rounded-3 bg-primary-subtle p-2 lead link-dark ms-auto pe-3">More</a> -->
             </div>
         <!-- Looping through all the songs -->
-        {% for song in songs %}
+        {% for track in tracks %}
             <!-- small long items of songs -->
-                {{ unit_content.user_row_of_track(song, current_user) }}
+                {{ unit_content.row_of_track(track, current_user, role_specific_actions) }}
             <!-- end long items of songs -->
         {% endfor %}
 </div>

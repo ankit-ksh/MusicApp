@@ -33,7 +33,7 @@ def explore():
     songs['pop'] = pop
     # fetching overview for english tracks
     # query_result = db.session.execute(db.select(User).where(Track.language == 'english').limit(5)).scalars()
-    return render_template('general/explore.html', songs=songs)
+    return render_template('general/explore.html', tracks=songs)
 
 @bp.route('/library')
 def library():

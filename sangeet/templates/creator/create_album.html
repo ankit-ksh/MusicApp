@@ -4,33 +4,33 @@
 
 {% block main %}
 
-<div class="container mt-5 ">
-    <div class="col-md-6 p-3 mx-auto rounded-2">
+<div class="container m-3">
+    <div class="col-md-6 mx-auto">
         <form class="form-control vstack gap-2" action="/upload/album" method="post">
-            <div class="h1 mx-auto text-center pt-4 pb-2">
-                Create Album
+            <div class="hstack px-3 py-5 bg-primary-subtle rounded-2 sangeet-background">
+                <div class="h3 text-center">
+                    Create Album
+                </div>
+                    <div class="ms-auto">
+                    <button type="submit" class="btn btn btn-primary">Create</button>
+                </div>
+            </div>          
+            <div class="form-floating">
+                <input class="form-control" name="album_name" id="album_name" name="album_name" placeholder="album_name" type="text" required>
+                <label class="form-label" for="album_name">Album Title</label>
             </div>
-            <div>
-                <div class="form-floating">
-                    <input class="form-control" name="album_name" id="album_name" name="album_name" placeholder="album_name" type="text" required>
-                    <label class="form-label" for="album_name">Album Title</label>
-                  </div>
+            <div class="form-floating">
+                <input class="form-control" name="artist_name" id="artist_name" name="artist_name" placeholder="artist_name" type="text" required>
+                <label class="form-label" for="artist_name">Artist Name</label>
             </div>
-            <div>
-                <div class="form-floating">
-                    <input class="form-control" name="artist_name" id="artist_name" name="artist_name" placeholder="artist_name" type="text" required>
-                    <label class="form-label" for="artist_name">Artist Name</label>
-                  </div>
+            <div class="form-floating">
+                <input class="form-control" name="release_date" id="release_date" name="release_date" placeholder="release_date" type="date" required>
+                <label class="form-label" for="release_date">Release Date</label>
             </div>
-            <div>
-                <div class="form-floating">
-                    <input class="form-control" name="release_date" id="release_date" name="release_date" placeholder="release_date" type="date" required>
-                    <label class="form-label" for="release_date">Release Date</label>
-                  </div>
+            <div class="form-floating">
+                <textarea class="form-control" style="height: 200px;" name="lyrics" placeholder="lyrics" id="lyrics"></textarea>
+                <label for="lyrics">Album Description</label>
             </div>
-            <div class="mx-auto">
-                <button type="submit" class="btn btn-primary btn-lg my-3">Upload</button>
-            </div>            
         </form>
     </div>
 </div>

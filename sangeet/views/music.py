@@ -18,7 +18,7 @@ def all_tracks():
     query_result = db.session.execute(db.select(Track)).scalars()
     song_list = [result for result in query_result]
 
-    return render_template('general/list_all_songs.html', title='All Songs', songs=song_list)
+    return render_template('general/list_all_songs.html', title='All Songs', tracks=song_list)
 
 @bp.route('/english')
 def english_tracks():
@@ -32,7 +32,7 @@ def hindi_tracks():
 def pop_tracks():
     query_result = db.session.execute(db.select(Track).where(Track.genre == 'pop')).scalars()
     song_list = [result for result in query_result]
-    return render_template('general/list_all_songs.html', list_type='pop', title='All Pop Songs', songs=song_list)
+    return render_template('general/list_all_songs.html', list_type='pop', title='All Pop Songs', tracks=song_list, unit_content_path='includes/general/row_of_track.html')
 
 @bp.route('/devotional')
 def devotional_tracks():
@@ -56,4 +56,4 @@ def trending_tracks():
 def regional_tracks():
     query_result = db.session.execute(db.select(Track).where(Track.genre == 'regional')).scalars()
     song_list = [result for result in query_result]
-    return render_template('general/list_all_songs.html', list_type='pop', title='All Regional Songs', songs=song_list)
+    return render_template('general/list_all_songs.html', list_type='pop', title='All Regional Songs', tracks=song_list)

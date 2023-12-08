@@ -2,11 +2,11 @@
 {% import 'macros/group_of_content.html' as group_of_content %}
 {% set home_link = 'active' %}
 
-
 {% block main %}
+{% set user_type_specific_functionality = 'hello' %}
 
-{{ group_of_content.song_list_overview(current_user=current_user, title="Trendin on Sangeet", list_type='trending') }}
-{{ group_of_content.song_list_overview(current_user=current_user, title="All Songs on Sangeet", list_type='all') }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="Trendin on Sangeet", list_type='trending') }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="All Songs on Sangeet", list_type='all') }}
 
 
 {% endblock %}

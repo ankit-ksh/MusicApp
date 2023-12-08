@@ -4,11 +4,11 @@
 
 {% block main %}
 
-{{ group_of_content.song_list_overview(current_user=current_user, title="Top Pop", list_type='pop', songs=songs['pop']) }}
-{{ group_of_content.song_list_overview(current_user=current_user, title="English", list_type='english', songs=songs['english']) }}
-{{ group_of_content.song_list_overview(current_user=current_user, title="Hindi", list_type='hindi', songs=songs['hindi']) }}
-{{ group_of_content.song_list_overview(current_user=current_user, title="Regional", list_type='regional', songs=songs['regional']) }}
-{{ group_of_content.song_list_overview(current_user=current_user, title="Romantic Tunes", list_type='romantic', songs=songs['romantic']) }}
-{{ group_of_content.song_list_overview(current_user=current_user, title="Devotional Melodies", list_type='devotional', songs=songs['devotional']) }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="Top Pop", list_type='pop', tracks=tracks['pop']) }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="English", list_type='english', tracks=tracks['english']) }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="Hindi", list_type='hindi', tracks=tracks['hindi']) }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="Regional", list_type='regional', tracks=tracks['regional']) }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="Romantic Tunes", list_type='romantic', tracks=tracks['romantic']) }}
+{{ group_of_content.track_list_overview(current_user=current_user, title="Devotional Melodies", list_type='devotional', tracks=tracks['devotional']) }}
 
 {% endblock %}

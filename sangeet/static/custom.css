@@ -22,3 +22,12 @@
 	border-radius: 50%;
 }
 
+.text-area{
+	height: 503px;
+	
+}
+.sangeet-background{
+	background-image: url('../static/branding/music_symbols.png');
+	background-position: 1% 93%;
+	background-size: 100%;
+}

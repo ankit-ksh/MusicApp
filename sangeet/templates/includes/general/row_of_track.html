@@ -1,0 +1,43 @@
+<div class="row gap-3 justify-content-evenly align-items-center p-2 m-2 bg-success-subtle rounded-2">
+    <a class="col-sm-3 text-decoration-none text-white" href="/music/track/{{song.id}}">
+        <div class="lead">
+            {{ song.name }}
+        </div>
+        <!-- Player for the song -->
+    </a>
+    <audio id="player"src="#"></audio>
+    <div class="col">
+        <div class="hstack gap-1">
+            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').play(); "document.getElementById('player').('hello')"">Play</button>
+            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').pause()">Pause</button>
+            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').muted=!document.getElementById('player').muted">Lyrics</button>
+        </div>            
+    </div>
+    <!-- for collecting the rating of the song -->
+    <form class="col-1" action="#">
+        <div class="hstack gap-1">
+            <select class="col btn btn-sm btn-secondary" name="rating" id="rating">
+                <option value="">?</option>
+                {% for i in range(1, 6) %}
+                <option value="{{i}}">{{i}} *</option>
+                {% endfor %}
+            </select>
+            <input class="btn btn-sm btn-primary" formaction="/user/rating" type="submit" value="Rate">
+        </div>
+    </form>
+    <!-- for adding the song to a specific playlist -->
+    <form class="col hstack gap-1">
+        <!-- <div class="col hstack gap-1"> -->
+        <select class="btn btn-sm btn-secondary" name="add_to_playlist" id="add_to_playlist">
+            <option value="Add to Playlist">Choose Playlist</option>
+            {% for playlist in current_user.playlists %}
+                <option value="{{playlist}}">{{playlist.name}}</option>
+            {% endfor %}
+        </select>
+        <input class="btn btn-sm btn-primary" formaction="/user/add_to_playlist" type="submit" value="Add">
+    </form>
+    <!-- Admin or Creator specific actions -->
+    <form class="col hstack gap-1">
+        {{hello}}
+    </form>
+</div>
