@@ -1,6 +1,7 @@
 tmp/
 .config/
 test_app/
+.notes/
 
 # Added to ignore python and flask files
 *.pyc

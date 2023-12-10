@@ -2,11 +2,16 @@
 {% import 'macros/group_of_content.html' as group_of_content %}
 {% set home_link = 'active' %}
 
+{% if current_user.role == 'creator' %}
+    {% set role_specific_actions = 'includes/creator/creator_track_actions.html' %}
+{% elif current_user.role == 'admin' %}
+{% endif %}
+
+
 {% block main %}
-{% set user_type_specific_functionality = 'hello' %}
-
-{{ group_of_content.track_list_overview(current_user=current_user, title="Trendin on Sangeet", list_type='trending') }}
-{{ group_of_content.track_list_overview(current_user=current_user, title="All Songs on Sangeet", list_type='all') }}
-
-
+{% for entry in content %}
+    {% set cat_link=content[entry]['cat_link'] %}
+    {% set tracks=content[entry]['items'] %}
+    {{ group_of_content.track_list_overview(role_specific_actions, current_user, tracks, cat_link, title=content[entry]['title']) }}
+{% endfor %}
 {% endblock %}

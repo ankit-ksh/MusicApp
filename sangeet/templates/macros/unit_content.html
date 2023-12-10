@@ -1,23 +1,18 @@
 <!-- row of a track for user, admin and creators all. A block which will contain extra funcionality for a user has to be overridden -->
 
 {% macro row_of_track(track, current_user, role_specific_actions) %}
-<div class="row gap-3 justify-content-evenly align-items-center p-2 m-2 bg-success-subtle rounded-2">
+<div class="row gap-3 justify-content-evenly align-items-center p-1 m-1 bg-success-subtle rounded-2">
     <a class="col-sm-3 text-decoration-none text-dark" href="/music/track/{{track.id}}">
-        <div class="lead">
+        <div class="">
             {{ track.name }}
         </div>
         <!-- Player for the track -->
     </a>
-    <audio id="player"src="#"></audio>
-    <div class="col">
-        <div class="hstack gap-1">
-            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').play(); "document.getElementById('player').('hello')"">Play</button>
-            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').pause()">Pause</button>
-            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('player').muted=!document.getElementById('player').muted">Lyrics</button>
-        </div>            
-    </div>
+    <audio class="col-3" style="height: 30px;" controls>
+        <source src="{{ url_for('static', filename=track.file_name) }}" type="audio/mp3">
+    </audio>
     <!-- for collecting the rating of the song -->
-    <form class="col-1" action="#">
+    <form class="col" action="#">
         <div class="hstack gap-1">
             <select class="col btn btn-sm btn-secondary" name="rating" id="rating">
                 <option value="">?</option>
@@ -41,7 +36,7 @@
     </form>
     <!-- Admin or Creator specific actions -->
     <form class="col hstack gap-1">
-        {% include role_specific_actions %}
+        {% include 'includes/creator/creator_track_actions.html' %}
     </form>    
 </div>
 

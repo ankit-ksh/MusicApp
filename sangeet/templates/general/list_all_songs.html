@@ -10,8 +10,8 @@
 
 {% block main %}
 
-
+{{table}}
 <!-- This template will get a tracks list based on the endpoint and its job is just to show the list -->
-{{ group_of_content.list_provided_tracks(role_specific_actions) }}
+{{ group_of_content.list_provided_tracks(role_specific_actions=role_specific_actions, tracks=tracks, current_user=current_user) }}
 
 {% endblock %}

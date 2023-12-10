@@ -1,14 +1,18 @@
 {% extends 'layouts/layout.html' %}
-{% import 'macros/group_of_content.html' as group_of_content %}
+{% import 'macros/group_of_content.html' as group_of_content with context %}
 {% set explore_link = 'active' %}
 
+
+{% if current_user.role == 'creator' %}
+    {% set role_specific_actions = 'includes/creator/creator_track_actions.html' %}
+{% elif current_user.role == 'admin' %}
+{% endif %}
+
+
 {% block main %}
-
-{{ group_of_content.track_list_overview(current_user=current_user, title="Top Pop", list_type='pop', tracks=tracks['pop']) }}
-{{ group_of_content.track_list_overview(current_user=current_user, title="English", list_type='english', tracks=tracks['english']) }}
-{{ group_of_content.track_list_overview(current_user=current_user, title="Hindi", list_type='hindi', tracks=tracks['hindi']) }}
-{{ group_of_content.track_list_overview(current_user=current_user, title="Regional", list_type='regional', tracks=tracks['regional']) }}
-{{ group_of_content.track_list_overview(current_user=current_user, title="Romantic Tunes", list_type='romantic', tracks=tracks['romantic']) }}
-{{ group_of_content.track_list_overview(current_user=current_user, title="Devotional Melodies", list_type='devotional', tracks=tracks['devotional']) }}
-
+{% for entry in content %}
+    {% set cat_link=content[entry]['cat_link'] %}
+    {% set tracks=content[entry]['items'] %}
+    {{ group_of_content.track_list_overview(role_specific_actions, current_user, tracks, cat_link, title=content[entry]['title']) }}
+{% endfor %}
 {% endblock %}
