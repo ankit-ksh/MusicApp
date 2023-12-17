@@ -19,6 +19,10 @@ bp = Blueprint('auth', __name__)
 def logged_out_home():
     return render_template('general/logged_out_homepage.html')
 
+@bp.route('/player')
+def player():
+    return render_template('music/player.html')
+
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':

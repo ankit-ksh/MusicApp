@@ -1,0 +1,97 @@
+{% extends 'layouts/layout.html' %}
+{% block main %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='player.css') }}">
+    <div id="playerX" class="d-flex">
+        <div class="container w-50 my-4 w-50 d-flex flex-column align-items-center ">
+            <div class="song-details">
+                <div class="album-container">
+                    <img class="album-art" alt=""
+                         src="https://i.scdn.co/image/ab67616d0000b2730b7cece3eba7e5b6aec0777a"/>
+                    <div class="card-img-overlay overlay text-center d-flex justify-content-evenly align-items-center">
+                    <span id="play-pause-btn" class="material-symbols-outlined text-light btn-enlarge"
+                          style="font-size: 72px">pause_circle</span>
+
+                    </div>
+                </div>
+                <h2 id="song-title">Play with Fire</h2>
+                <p id="artist-name">Artist Name</p>
+            </div>
+            <div class="controls">
+                <button id="previous-btn" class="control-btn">
+                    <span class="material-symbols-outlined">skip_previous</span>
+                </button>
+                <button id="play-pause-btn" class="control-btn" style="width: 80px; height: 80px">
+                    <span class="material-symbols-outlined">pause</span>
+                </button>
+                <button id="next-btn" class="control-btn">
+                    <span class="material-symbols-outlined">skip_next</span>
+                </button>
+            </div>
+            <div class="">
+        <span>
+
+        </span>
+            </div>
+        </div>
+        <div style="height: 70vh; overflow: hidden" class="d-flex my-4 flex-column w-50 h3">
+            <div style="width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+    box-sizing: content-box;">
+                <p>Insane, inside<br>
+                    The danger gets me high<br>
+                    Can't help myself<br>
+                    Got secrets I can't tell</p>
+
+                <p>I love the smell of gasoline<br>
+                    I light the match to taste the heat<br>
+                    I've always liked to play with fire<br>
+                    Play with fire</p>
+
+                <p>I've always liked to play with fire<br>
+                    I ride (I ride) the edge (the edge)<br>
+                    My speed goes in the red<br>
+                    Hot blood (hot blood), these veins (these veins)<br>
+                    My pleasure is their pain</p>
+
+                <p>I love to watch the castles burn<br>
+                    These golden ashes turn to dirt (hmm, hmm)<br>
+                    I've always liked to play with fire<br>
+                    Play with fire</p>
+
+                <p>Play with fire<br>
+                    Fire, fire<br>
+                    I've always liked to play with fire<br>
+                    Oh, watching as the flames get higher<br>
+                    Oh, I've always liked to play with (mmm)</p>
+
+                <p>Rite of passage, classic havoc<br>
+                    Match in the gas tank, ooh, that's wretched<br>
+                    Unstoppable, legendary animal (mmm)<br>
+                    Digital justice, now you're gonna know us<br>
+                    Hail to the king and queen of the ruckus<br>
+                    Yacht Money wired, no denying</p>
+
+                <p>I've always liked to play with fire<br>
+                    Play with fire<br>
+                    (I've always liked to play with fire)<br>
+                    Play with fire<br>
+                    (I've always liked to play with fire)<br>
+                    Fire, fire<br>
+                    (I've always liked to play with fire)<br>
+                    Always liked to play with fire<br>
+                    (I've always liked to play with)</p>
+            </div>
+        </div>
+    </div>
+
+    <audio class="d-none" id="audio-player" controls>
+        <source src="/music" type="audio/mp3" id="audio-source">
+        Your browser does not support the audio element.
+    </audio>
+    <script src="{{ url_for('static', filename='player.js') }}"></script>
+{% endblock %}
+
+{#</body>#}
+{#</html>#}
