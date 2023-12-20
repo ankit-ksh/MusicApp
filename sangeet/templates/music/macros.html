@@ -1,0 +1,34 @@
+{% import 'macros/general.html' as general_macros %}
+
+<!-- Creator specific track actions -->
+{% macro track_creator_specific_actions(track) %}
+  <!-- Edit Track -->
+  {{ general_macros.submit_info(label='Edit', name='track_id', value=track.id, url="/edit/track", color='warning')}}
+  <!-- Delete Track -->
+  {{ general_macros.submit_info(label='Delete', name='track_id', value=track.id, url="/delete/track", color='danger')}}
+{% endmacro %}
+
+<!-- Creator specific album actions -->
+{% macro album_creator_specific_actions(album) %}
+  <!-- Flag Track -->
+  {{ general_macros.submit_info(label='Edit', name='album_id', value=album.id, url="/edit/album", color='warning')}}
+  <!-- delete Track -->
+  {{ general_macros.submit_info(label='Delete', name='album_id', value=album.id, url="/delete/album", color='danger')}}
+{% endmacro %}
+
+
+<!-- Admin specific track actions -->
+{% macro track_admin_specific_actions(track) %}
+  <!-- Flag Track -->
+  {{ general_macros.submit_info(label='Flag', name='track_id', value=track.id, url="/flag/track", color='warning')}}
+  <!-- Remove Track -->
+  {{ general_macros.submit_info(label='Remove', name='track_id', value=track.id, url="/remove/track", color='danger')}}
+{% endmacro %}
+
+<!-- Admin specific album actions -->
+{% macro album_admin_specific_actions(album) %}
+  <!-- Flag Track -->
+  {{ general_macros.submit_info(label='Flag', name="album_id", value=album.id, url="/flag/album", color='warning')}}
+  <!-- Remove Track -->
+  {{ general_macros.submit_info(label='Remove', name="album_id", value=album.id, url="/remove/album", color='danger')}}
+{% endmacro %}

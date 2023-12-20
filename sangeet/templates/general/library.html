@@ -1,9 +1,7 @@
 {% extends 'layouts/layout.html' %}
-{% import 'macros/group_of_content.html' as group_of_content %}
 {% set library_link = 'active' %}
 
 {% block main %}
 
-{{ group_of_content.track_list_overview(current_user=current_user, title='Liked Songs') }}
 
 {% endblock %}

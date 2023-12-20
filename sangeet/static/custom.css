@@ -19,6 +19,7 @@
 .show-profile-pic {
 	padding: 0;
 	width: 40px;
+	height: 40px;
 	border-radius: 50%;
 }
 
@@ -30,4 +31,10 @@
 	background-image: url('../static/branding/music_symbols.png');
 	background-position: 1% 93%;
 	background-size: 100%;
+}
+
+.big-profile-picture{
+	width: 300px;
+	height: 300px;
+	border-radius: 5px;
 }

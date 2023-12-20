@@ -1,3 +1,6 @@
-<!-- Macro for getting flashed messages to show up with a defined color -->
-{% macro flash_message() %}
+{% macro submit_info(label, name, value, url, color) %}
+    <form action="{{url}}" method="post">
+        <input type="hidden" name="{{name}}" value="{{ value }}">
+        <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
+    </form>
 {% endmacro %}

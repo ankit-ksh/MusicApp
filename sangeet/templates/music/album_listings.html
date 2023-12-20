@@ -1,0 +1,34 @@
+{% import 'music/macros.html' as music_macros %}
+{% import 'macros/general.html' as general_macros %}
+<!-- Generally list all albums whether for an overview or all albums -->
+
+<div class="container mt-2 border border-1 rounded-2 border p-3">
+    <div class="hstack px-2">
+        <h3 class="rounded-3 bg-danger-subtle p-2">{{title}}</h3>
+        <a href="{{link_address}}" class="rounded-3 p-2 lead link-success ms-auto pe-3">{{link_name}}</a>
+    </div>
+<!-- Looping through all the songs -->
+{% for album in albums %}
+    <!-- small long items of songs -->
+    <div class="row gap-3 justify-content-evenly align-items-center p-1 m-1 bg-success-subtle rounded-2">
+        <a class="col-sm-3 text-decoration-none text-dark" href="/music/album/{{album.id}}">
+            <div class="">
+                {{ album.name }}
+            </div>
+            <!-- Player for the album -->
+        </a>
+        <div class="col-sm-4 ms-auto hstack gap-2">
+            {{ general_macros.submit_info(label='Add to Library', value=album.id, url='/album/add_to_library', color='dark')}}
+            <!-- Admin or Creator specific actions -->
+            <div class="hstack gap-1">
+                {% if current_user.role=='admin' %}
+                    {{ music_macros.album_admin_specific_actions(album) }}
+                {% elif current_user.role=='creator' %}
+                    {{ music_macros.album_creator_specific_actions(album) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>    
+    <!-- end long items of songs -->
+{% endfor %}
+</div>

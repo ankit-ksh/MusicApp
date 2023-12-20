@@ -1,0 +1,63 @@
+{% import 'music/macros.html' as music_macros %}
+{% import 'macros/general.html' as general_macros %}
+
+
+<div class="container mt-2 border border-1 rounded-2 border p-3">
+    <div class="hstack px-2">
+        <h3 class="rounded-3 bg-danger-subtle p-2">{{title}}</h3>
+        <a href="{{link_address}}" class="rounded-3 p-2 lead link-success ms-auto pe-3">{{link_name}}</a>
+    </div>
+<!-- Looping through all the songs -->
+{% for track in tracks %}
+    <!-- small long items of songs -->
+    <div class="row gap-3 justify-content-evenly align-items-center p-1 m-1 bg-success-subtle rounded-2">
+        <a class="col-sm-3 text-decoration-none text-dark" href="/track/{{track.id}}">
+            <div class="">
+                {{ track.name }}
+            </div>
+            <!-- Player for the track -->
+        </a>
+        <audio class="col-3" style="height: 30px;" controls>
+            <source src="{{ url_for('static', filename=track.file_name) }}" type="audio/mp3">
+        </audio>
+        <!-- Options for the track start -->
+        <div class="col hstack gap-3">
+            <!-- Get lyrics -->
+            {{ general_macros.submit_info(label='Lyrics', value=track.id, url="/get_lyrics", color='success')}}
+            <!-- for collecting the rating of the song -->
+            <form class="col" action="#">
+                <div class="hstack gap-1">
+                    <select class="col btn btn-sm btn-secondary" name="rating" id="rating">
+                        <option value="">?</option>
+                        {% for i in range(1, 6) %}
+                        <option value="{{i}}">{{i}} *</option>
+                        {% endfor %}
+                    </select>
+                    <input class="btn btn-sm btn-primary" formaction="/user/rating" type="submit" value="Rate">
+                </div>
+            </form>
+            <!-- for adding the song to a specific playlist -->
+            <form class="col hstack gap-1">
+                <!-- <div class="col hstack gap-1"> -->
+                <select class="btn btn-sm btn-secondary" name="add_to_playlist" id="add_to_playlist">
+                    <option value="Add to Playlist">Choose Playlist</option>
+                    {% for playlist in current_user.playlists %}
+                        <option value="{{playlist}}">{{playlist.name}}</option>
+                    {% endfor %}
+                </select>
+                <input class="btn btn-sm btn-primary" formaction="/user/add_to_playlist" type="submit" value="Add">
+            </form>
+            <!-- Admin or Creator specific actions -->
+            <div class="hstack gap-1">
+                {% if current_user.role=='admin' %}
+                    {{ music_macros.track_admin_specific_actions(track) }}
+                {% elif (current_user.role=='creator') and (current_user.id == track.creator_id) %}
+                    {{ music_macros.track_creator_specific_actions(track) }}
+                {% endif %}
+            </div>
+        </div>
+        <!-- Options for the track end -->
+    </div>    
+    <!-- end long items of songs -->
+{% endfor %}
+</div>

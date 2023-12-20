@@ -1,17 +1,9 @@
 {% extends 'layouts/layout.html' %}
-{% import 'macros/group_of_content.html' as group_of_content with context %}
-
-{% if current_user.role == 'creator' %}
-    {% set role_specific_actions = 'includes/creator/creator_track_actions.html' %}
-{% elif current_user.role == 'admin' %}
-{% endif %}
-
 
 
 {% block main %}
 
 {{table}}
 <!-- This template will get a tracks list based on the endpoint and its job is just to show the list -->
-{{ group_of_content.list_provided_tracks(role_specific_actions=role_specific_actions, tracks=tracks, current_user=current_user) }}
 
 {% endblock %}

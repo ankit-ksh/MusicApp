@@ -1,17 +1,22 @@
 {% extends 'layouts/layout.html' %}
-{% import 'macros/group_of_content.html' as group_of_content %}
 {% set home_link = 'active' %}
-
-{% if current_user.role == 'creator' %}
-    {% set role_specific_actions = 'includes/creator/creator_track_actions.html' %}
-{% elif current_user.role == 'admin' %}
-{% endif %}
 
 
 {% block main %}
 {% for entry in content %}
+
+    <!-- Include flash messages -->
+    <div class="m-0 p-0">
+        {% include 'includes/general/flash_message.html' %}
+    </div>    
+
     {% set cat_link=content[entry]['cat_link'] %}
     {% set tracks=content[entry]['items'] %}
-    {{ group_of_content.track_list_overview(role_specific_actions, current_user, tracks, cat_link, title=content[entry]['title']) }}
+
+    {% set title=content[entry]['title'] %}
+    {% set link_name='Any Link' %}
+    {% set link_address=content[entry]['cat_link'] %}
+    {% include 'music/track_listings.html' %}
+    
 {% endfor %}
 {% endblock %}

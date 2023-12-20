@@ -1,6 +1,6 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <ul class="flashes list-unstyled">
+    <ul class="flashes my-2 list-unstyled">
         {% for category, message in messages %}
             {% if category == 'error' %}
                 <li class="alert alert-danger">{{ message }}</li>

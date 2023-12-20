@@ -1,6 +1,10 @@
 {% extends 'layouts/base_layout.html' %}
-{% set user_type="admin" %}
 {% set user_type_navbrand_subscript="Admin" %}
+
+<!-- Dropdown of user profile photo -->
+{% block role_specific_info %}
+{% endblock %}
+
 
 <!-- Extra left navigation links for the Admin -->
 {% block extra_left_nav_options %}

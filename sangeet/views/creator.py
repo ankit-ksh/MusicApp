@@ -94,19 +94,55 @@ def my_songs():
 
 @bp.route('/my_content/albums')
 def my_albums():
-    return render_template('creator/my_songs.html')
+    query_result = db.session.execute(db.select(Album).where(Album.creator_id == current_user.id)).scalars()
+    albums = [entry for entry in query_result]
+    return render_template('creator/my_albums.html', albums=albums)
 
 @bp.route('/delete/track', methods=['GET', 'POST'])
 def delete_track():
     if request.method == 'POST':
         track_id = request.form.get('track_id')
-        track_to_delete = db.session.execute(db.select(Track).where(Track.id == track_id)).scalar()
-        if track_to_delete.creator_id == current_user.id:
-            track_name = track_to_delete.name
-            db.session.delete(track_to_delete)
-            db.session.commit()
-            flash(f"Track Deleted : {track_name}", 'success')
+        if not track_id:
+            flash("Invalid Request", 'error')
+            return redirect(request.base_url)
+        track_to_delete = db.session.get(Track, track_id)
+        if track_to_delete and track_to_delete.creator_id == current_user.id:
+            try:
+                track_name = track_to_delete.name
+                db.session.delete(track_to_delete)
+                db.session.commit()
+                flash(f"Track Deleted : {track_name}", 'success')
+                return redirect(request.base_url)
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error deleting track: {str(e)}", 'error')
+                return redirect(request.base_url)
         else:
             flash("Not authenticated")
-            return render_template('general/home.html')
-    return render_template('creator/my_songs.html')
+            return redirect(request.base_url)
+    return redirect(request.referrer)
+
+
+@bp.route('/delete/album', methods=['GET', 'POST'])
+def delete_album():
+    if request.method == 'POST':
+        album_id = request.form.get('album_id')
+        if not album_id:
+            flash("Invalid Request", 'error')
+            return redirect(request.base_url)
+        album_to_delete = db.session.get(Album, album_id)
+        if album_to_delete and album_to_delete.creator_id == current_user.id:
+            try:
+                album_name = album_to_delete.name
+                db.session.delete(album_to_delete)
+                db.session.commit()
+                flash(f"album Deleted : {album_name}", 'success')
+                return redirect(request.base_url)
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error deleting album: {str(e)}", 'error')
+                return redirect(request.base_url)
+        else:
+            flash("Not authenticated")
+            return redirect(request.base_url)
+    return redirect(url_for('creator.my_albums'))

@@ -38,6 +38,7 @@ def login():
                 flash('Incorrect Password!', 'error')
         else:
             flash('Username Not Found!', 'error')
+    flash('Hello! Welcome back. User your User id and Password to log in. For any assistance contact us.')
     return render_template('auth/login.html')
 
 @bp.route('/logout')
