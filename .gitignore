@@ -8,6 +8,8 @@ test_app/
 __pycache__/
 
 instance/
+# sangeet/static/music/
+# sangeet/user_data/
 
 .pytest_cache/
 .coverage
