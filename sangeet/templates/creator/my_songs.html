@@ -1,11 +1,11 @@
-{% extends 'layouts/layout.html' %}
+{% extends appropriate_layout %}
 
 
 {% block main %}
 
 <!-- Include flash messages -->
 <div class="m-0 p-0">
-    {% include 'includes/general/flash_message.html' %}
+    {% include 'includes/general/modal_flash_message.html' %}
 </div>
 
 {% set title='My Songs' %}

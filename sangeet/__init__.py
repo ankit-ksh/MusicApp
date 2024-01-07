@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_login import current_user
 from .extensions import db
 from .extensions import login_manager
 # Followig import is for getting the user object for the user loader of flask login LoginManager
@@ -46,7 +47,10 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.from_mapping(test_config)
 
-    
+    # registering the context processors
+    from .utils.configuration import inject_user_data
+    app.context_processor(inject_user_data)
+
     # registering the blueprints
     from .views import auth
     app.register_blueprint(auth.bp)
@@ -61,3 +65,4 @@ def create_app(test_config=None):
 
 
     return app
+

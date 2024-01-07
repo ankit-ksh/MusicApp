@@ -1,6 +1,10 @@
-{% macro submit_info(label, name, value, url, color) %}
+{% macro submit_info(label, data, url, color) %}
     <form action="{{url}}" method="post">
-        <input type="hidden" name="{{name}}" value="{{ value }}">
-        <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
+    {% for entry in data %}
+            <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
+    {% endfor %}
+    <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
     </form>
+
+
 {% endmacro %}

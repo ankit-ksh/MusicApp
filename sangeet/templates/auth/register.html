@@ -51,7 +51,8 @@
   
           <button class="btn btn-dark btn-lg">Register</button>
           <span>Already a user? <a href="/login">Sign in</a></span>
-          {% include 'includes/general/flash_message.html' %}
+          {% set flash_message_links={'Go to Login':'/login'} %}
+          {% include 'includes/general/simple_flash_message.html' %}
         </form>  
       </div>
     </div>

@@ -9,9 +9,7 @@ from flask_login import (
     logout_user,
     login_required,
 )
-from sangeet.views import user, creator, admin
 from sangeet.models import *
-
 
 bp = Blueprint('auth', __name__)
 

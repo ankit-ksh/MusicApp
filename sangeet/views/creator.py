@@ -112,16 +112,62 @@ def delete_track():
                 db.session.delete(track_to_delete)
                 db.session.commit()
                 flash(f"Track Deleted : {track_name}", 'success')
-                return redirect(request.base_url)
+                # return redirect(request.base_url)
             except Exception as e:
                 db.session.rollback()
                 flash(f"Error deleting track: {str(e)}", 'error')
-                return redirect(request.base_url)
+                # return redirect(request.base_url)
         else:
             flash("Not authenticated")
-            return redirect(request.base_url)
+            # return redirect(request.base_url)
     return redirect(request.referrer)
 
+@bp.route('/edit/track/<track_id>', methods=['GET', 'POST'])
+def edit_track(track_id):
+    existing_track = db.session.get(Track, track_id)
+    if request.method == 'POST':
+        track_title = request.form.get('song_title')
+        artist_name = request.form.get('artist_name')
+        genre_id = request.form.get('genre_id')
+        creator_id = request.form.get('creator_id')
+
+        if 'file' not in request.files:
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return redirect(request.url)
+
+        if file:
+            file_name = secure_filename(file.filename)
+            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], file_name)
+
+            # create folder if it doesn't exist
+            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
+            # Save file to the file system
+            file.save(file_path)
+
+            # update information in the database
+            existing_track.name = request.form.get('song_title')
+            existing_track.artist_name = request.form.get('artist_name')
+            existing_track.genre_id = request.form.get('genre_id')
+            existing_track.creator_id = request.form.get('creator_id')
+            existing_track.file_name = request.form.get('file_name')
+            existing_track.file_path = request.form.get('file_path')            
+            db.session.commit()
+            flash('Update Successfull', 'success')
+            return redirect(request.referrer)
+        else:
+            flash('Failed', 'error')
+            return redirect(request.url)
+        
+    # provide genres to select from
+    genres = db.session.execute(db.select(Genre)).scalars()
+    genres = [genre for genre in genres]
+
+    # return render_template('creator/edit_track.html', genres=genres, existing_track=existing_track)
+    return track_id
 
 @bp.route('/delete/album', methods=['GET', 'POST'])
 def delete_album():

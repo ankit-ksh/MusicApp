@@ -1,0 +1,28 @@
+{% import 'macros/music_macros.html' as music_macros %}
+{% import 'macros/general.html' as general_macros %}
+<!-- Generally list all albums whether for an overview or all albums -->
+
+<div class="container col-sm-9 mt-2 border border-1 rounded-2 border p-3">
+    <div class="hstack px-2">
+        <h3 class="rounded-3 bg-danger-subtle p-2">My Playlists</h3>
+        <div class="ms-auto">
+            <a href="{{link_address}}" class="rounded-3 p-2 lead link-success ms-auto pe-3">Create a New Playlist</a>
+            <a href="{{link_address}}" class="rounded-3 p-2 lead link-success ms-auto pe-3">All Playlists</a>
+        </div>    
+        </div>
+<!-- Looping through all the songs -->
+{% for playlist in current_user.playlists %}
+    <!-- small long items of songs -->
+    <div class="row gap-3 align-items-center p-1 m-1 bg-success-subtle rounded-2">
+        <a class="col-sm-3 text-decoration-none text-dark" href="/playlist/tracks">
+            <div class="">
+                {{ playlist.name }}
+            </div>
+        </a>
+        <div class="col dropdown ms-auto">
+            {{ general_macros.submit_info(label='Edit', data={'playlist_id':playlist.id}, url="/edit_playlist", color='primary')}}
+        </div>
+    </div>    
+    <!-- end long items of songs -->
+{% endfor %}
+</div>

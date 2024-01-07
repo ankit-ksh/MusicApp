@@ -1,7 +1,7 @@
 # Implementing user pages
 
 from flask import (
-    Blueprint, redirect, render_template, request, session, url_for
+    Blueprint, redirect, render_template, request, session, url_for, flash
 )
 from sangeet.extensions import db
 from flask_login import (
@@ -10,33 +10,9 @@ from flask_login import (
     login_required,
 )
 from sangeet.models import *
+from sangeet.utils.general import *
 
 bp = Blueprint('general', __name__)
-
-
-def content_overview(categories):   # function for showing any content overview and redirecting to a page with all entries by just taking a categories dictionary
-    content = {}
-    for item in categories:
-        table = item['table']
-        filter_by = item.get('filter_by', None)
-        value = item.get('value', None)
-        cat_link = item['cat_link']
-        content[cat_link] = {}
-        content[cat_link]['title'] = item['title']
-        content[cat_link]['cat_link'] = item['cat_link']
-        if (filter_by is None):                 # If its the case of returning all items from a table
-            query_result = db.session.execute(db.select(table).limit(5)).scalars()
-            if (content[cat_link].get('order_by')):
-                order_by = content[cat_link].get('order_by')
-                query_result = db.session.execute(db.select(table).order_by(getattr(table, order_by)).desc()).limit(5).scalars()
-        elif item.get('table_2'):                # if condition will evaluate to true if table_2 attribute exists
-            table_2 = item['table_2']
-            query_result = db.session.execute(db.select(table).where(getattr(table_2, filter_by).ilike(f"{value}")).limit(5).join_from(table, table_2)).scalars()
-        else:   # both of the above and below queries are achiveing case insensitive matching, but in a different way
-            query_result = db.session.execute(db.select(Track).where(db.func.lower(getattr(table, filter_by)).ilike(f"{value.lower()}")).limit(5)).scalars()
-        query_result = [result for result in query_result]
-        content[cat_link]['items'] = query_result
-    return content
 
 
 @bp.route('/home')
@@ -64,9 +40,46 @@ def explore():
     # Return the result
     return render_template('general/explore.html', content=content)
 
+@bp.route('/add_track_to_playlist', methods=['GET', 'POST'])
+def add_track_to_playlist():
+    if request.method == 'POST':
+        track_id = request.form.get('track_id')
+        playlist_id = request.form.get('playlist_id')
+        # retrieve the track and playlist and add the track to the specified playlist
+        track = db.session.get(Track, track_id)
+        playlist = db.session.get(Playlist, playlist_id)
+        if track in playlist.tracks:
+            flash('Track is already part of that playlist', 'error')
+            return redirect(request.referrer)
+        playlist.tracks.append(track)
+        db.session.commit()
+        flash(f"Track '{track.name}' added to the playlist '{playlist.name}'", 'success')
+
+        return redirect(request.referrer)
+    return redirect(request.referrer)
+
+
+
+@bp.route('/playlist/tracks')
+def playlist_tracks():
+    if request.method == 'POST':
+        playlist_id = request.form.get('playlist_id')
+        playlist = db.session.get(Playlist, playlist_id)
+        query_result = playlist.tracks
+        tracks = [entry for entry in query_result]
+        return tracks
+
+
+
+
+
 @bp.route('/library')
 def library():
     return render_template('general/library.html')
+
+@bp.route('/my_playlists')
+def my_playlist():
+    return render_template('music/playlist_listings.html')
 
 @bp.route('/profile')
 def profile():
@@ -76,3 +89,10 @@ def profile():
 def preferences():
     return render_template('general/preferences.html')
 
+@bp.route('/test', methods=['GET', 'POST'])
+def test():
+    value1 = request.args.get('value1')
+    value2 = request.args.get('value2')
+    return render_template('general/test.html', value1=value1, value2=value2)
+
+    # return render_template('general/test.html')

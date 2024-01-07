@@ -38,3 +38,8 @@
 	height: 300px;
 	border-radius: 5px;
 }
+
+/* Custom CSS to hide the dropdown arrow */
+.dropdown-toggle::after {
+	display: none;
+}

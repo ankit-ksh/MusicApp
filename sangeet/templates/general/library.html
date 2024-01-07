@@ -1,7 +1,14 @@
-{% extends 'layouts/layout.html' %}
+{% extends appropriate_layout %}
 {% set library_link = 'active' %}
 
 {% block main %}
+
+<!-- Include flash messages -->
+<div class="m-0 p-0">
+    {% include 'includes/general/modal_flash_message.html' %}
+    {% include 'music/playlist_listings.html' %}
+</div>
+
 
 
 {% endblock %}

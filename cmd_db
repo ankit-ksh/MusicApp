@@ -1,0 +1,8 @@
+#! /usr/bin/python3
+
+# for working with the database in the python command line
+
+import sangeet
+from sangeet.models import *
+app = sangeet.create_app()
+app.app_context().push()

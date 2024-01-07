@@ -1,15 +1,14 @@
-{% extends 'layouts/layout.html' %}
+{% extends appropriate_layout %}
 {% set home_link = 'active' %}
 
 
 {% block main %}
+<!-- Include flash messages -->
+<div class="m-0 p-0">
+    {% include 'includes/general/modal_flash_message.html' %}
+</div>    
+
 {% for entry in content %}
-
-    <!-- Include flash messages -->
-    <div class="m-0 p-0">
-        {% include 'includes/general/flash_message.html' %}
-    </div>    
-
     {% set cat_link=content[entry]['cat_link'] %}
     {% set tracks=content[entry]['items'] %}
 

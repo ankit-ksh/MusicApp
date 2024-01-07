@@ -1,9 +1,16 @@
-{% extends 'layouts/layout.html' %}
+{% extends appropriate_layout %}
 
 
 {% block main %}
 
-{{table}}
-<!-- This template will get a tracks list based on the endpoint and its job is just to show the list -->
+<!-- Include flash messages -->
+<div class="m-0 p-0">
+    {% include 'includes/general/modal_flash_message.html' %}
+</div>
+
+{% set title='My Songs' %}
+{% set link_name='Any Link' %}
+{% set link_address='#' %}
+{% include 'music/track_listings.html' %}
 
 {% endblock %}

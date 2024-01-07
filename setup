@@ -1,0 +1,7 @@
+#! /usr/bin/bash
+
+# activate virtual environment
+source .sangeet_app_venv/bin/activate
+
+# set environment variables
+export FLASK_APP=sangeet

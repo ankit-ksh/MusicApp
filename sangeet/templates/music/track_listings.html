@@ -1,4 +1,4 @@
-{% import 'music/macros.html' as music_macros %}
+{% import 'macros/music_macros.html' as music_macros %}
 {% import 'macros/general.html' as general_macros %}
 
 
@@ -23,7 +23,7 @@
         <!-- Options for the track start -->
         <div class="col hstack gap-3">
             <!-- Get lyrics -->
-            {{ general_macros.submit_info(label='Lyrics', value=track.id, url="/get_lyrics", color='success')}}
+            {{ general_macros.submit_info(label='Lyrics', url="/get_lyrics", color='success')}}
             <!-- for collecting the rating of the song -->
             <form class="col" action="#">
                 <div class="hstack gap-1">
@@ -37,16 +37,16 @@
                 </div>
             </form>
             <!-- for adding the song to a specific playlist -->
-            <form class="col hstack gap-1">
-                <!-- <div class="col hstack gap-1"> -->
-                <select class="btn btn-sm btn-secondary" name="add_to_playlist" id="add_to_playlist">
-                    <option value="Add to Playlist">Choose Playlist</option>
+            <div class="col dropdown">
+                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Add to playlist
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="text-decoration-none block px-2" href="/create_new_playlist">Create New</a></li>
                     {% for playlist in current_user.playlists %}
-                        <option value="{{playlist}}">{{playlist.name}}</option>
+                        <li>{{ general_macros.submit_info(label=playlist.name, data={'action':'add', 'track_id':track.id, 'playlist_id':playlist.id}, url="/add_track_to_playlist")}}</li>
                     {% endfor %}
-                </select>
-                <input class="btn btn-sm btn-primary" formaction="/user/add_to_playlist" type="submit" value="Add">
-            </form>
+            </div>
             <!-- Admin or Creator specific actions -->
             <div class="hstack gap-1">
                 {% if current_user.role=='admin' %}
