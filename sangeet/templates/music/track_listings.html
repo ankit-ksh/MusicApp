@@ -42,9 +42,45 @@
                   Add to playlist
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="text-decoration-none block px-2" href="/create_new_playlist">Create New</a></li>
+                    <li class="ms-2">
+                        <!-- Bootstrap modal for creating a playlist -->
+                        <div class="modal" tabindex="-1" id="errorModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: rgba(255, 0, 0, 0.408);">
+                                        <h5 class="modal-title text-white">Error</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/playlist/create" method="post">
+                                            <label for="playlist_name">Name: </label>
+                                            <input id="playlist_name" type="text">
+                                            <input type="checkbox">
+                                            <label for="add_current_song"></label>
+                                            <input type="submit" value="create">
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     {% for playlist in current_user.playlists %}
-                        <li>{{ general_macros.submit_info(label=playlist.name, data={'action':'add', 'track_id':track.id, 'playlist_id':playlist.id}, url="/add_track_to_playlist")}}</li>
+                        <li class="ms-2">
+                            <form action="/playlist/append_track" method="post">
+                                {% if track in playlist.tracks %}
+                                    <input type="checkbox" checked>
+                                {% else %}
+                                    <input type="checkbox">
+                                {% endif %}
+                                <input type="hidden" name="action" value="append_track">
+                                <input type="hidden" name="track_id" value="{{track.id}}">
+                                <input type="hidden" name="playlist_id" value="{{playlist.id}}">
+                                <button class="btn btn-sm btn-{{color}}" type="submit">{{playlist.name}}</button>
+                            </form>
+                        </li>
                     {% endfor %}
             </div>
             <!-- Admin or Creator specific actions -->

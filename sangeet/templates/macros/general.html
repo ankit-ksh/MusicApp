@@ -6,5 +6,16 @@
     <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
     </form>
 
+{% endmacro %}
+
+{% macro submit_info_icon(icon_class, data, url) %}
+    <form action="{{url}}" method="post">
+    {% for entry in data %}
+            <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
+    {% endfor %}
+    <button type="submit hidden" style="border: none; background: none; outline:none; cursor: pointer; padding: 0;">
+        <i type="submit" class="bi {{icon_class}}"></i>
+    </button>
+    </form>
 
 {% endmacro %}

@@ -7,9 +7,12 @@ test_app/
 *.pyc
 __pycache__/
 
+
 instance/
-# sangeet/static/music/
-# sangeet/user_data/
+sangeet/static/music/
+sangeet/static/user_data/
+sangeet/static/sangeet_data/
+
 
 .pytest_cache/
 .coverage

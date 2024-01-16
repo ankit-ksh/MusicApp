@@ -8,6 +8,7 @@ from flask_login import (
     login_user,
     logout_user,
     login_required,
+    current_user
 )
 from sangeet.models import *
 from sangeet.utils.general import *
@@ -40,34 +41,59 @@ def explore():
     # Return the result
     return render_template('general/explore.html', content=content)
 
-@bp.route('/add_track_to_playlist', methods=['GET', 'POST'])
-def add_track_to_playlist():
+@bp.route('/playlist/<action>', methods=['GET', 'POST'])    # to modify any playlist's data
+def modify_playlist(action):
     if request.method == 'POST':
-        track_id = request.form.get('track_id')
-        playlist_id = request.form.get('playlist_id')
-        # retrieve the track and playlist and add the track to the specified playlist
-        track = db.session.get(Track, track_id)
-        playlist = db.session.get(Playlist, playlist_id)
-        if track in playlist.tracks:
-            flash('Track is already part of that playlist', 'error')
-            return redirect(request.referrer)
-        playlist.tracks.append(track)
+        try:
+            playlist_id = request.form.get('playlist_id')
+            playlist = db.session.get(Playlist, playlist_id)
+        except:
+            pass
+        if action == 'append_track':
+            track_id = request.form.get('track_id')
+            track = db.session.get(Track, track_id)
+            if track in playlist.tracks:
+                flash('Track is already part of that playlist', 'error')
+                return redirect(request.referrer)
+            playlist.tracks.append(track)
+            flash(f"Track '{track.name}' was added to the playlist '{playlist.name}'", 'success')
+        elif action == 'remove_track':
+            track_id = request.form.get('track_id')
+            track = db.session.get(Track, track_id)
+            playlist.tracks.remove(track)
+            flash(f"Track '{track.name}' was removed from the playlist '{playlist.name}'", 'success')
+            db.session.commit()
+        elif action == 'rename':
+            new_name = request.form.get('new_name')
+            playlist.name = new_name
+        elif action == 'create':
+            playlist_name = request.form.get('playlist_name')
+            new_playlist = Playlist(name=playlist_name, curator_id=current_user.id)
+            db.session.add(new_playlist)
+        elif action == 'delete':
+            pass
         db.session.commit()
-        flash(f"Track '{track.name}' added to the playlist '{playlist.name}'", 'success')
-
-        return redirect(request.referrer)
     return redirect(request.referrer)
 
-
-
-@bp.route('/playlist/tracks')
-def playlist_tracks():
+@bp.route('/playlist/<data>')     # to get any data about a playlist
+def get_playlist_data(data):
     if request.method == 'POST':
         playlist_id = request.form.get('playlist_id')
         playlist = db.session.get(Playlist, playlist_id)
-        query_result = playlist.tracks
-        tracks = [entry for entry in query_result]
-        return tracks
+        if data == 'tracks':
+            query_result = playlist.tracks
+            tracks = [entry for entry in query_result]
+            return tracks
+    return redirect(request.referrer)
+
+@bp.route('/album/<data>')
+def get_album_data(data):
+    if request.method == 'POST':
+        album_id = request.form.get('album_id')
+        album = db.session.get(Album, album_id)
+
+
+
 
 
 
@@ -89,10 +115,10 @@ def profile():
 def preferences():
     return render_template('general/preferences.html')
 
-@bp.route('/test', methods=['GET', 'POST'])
-def test():
-    value1 = request.args.get('value1')
-    value2 = request.args.get('value2')
-    return render_template('general/test.html', value1=value1, value2=value2)
+@bp.route('/test/<int:test_id>', methods=['GET', 'POST'])
+def test(test_id):
+    from sangeet.utils.test import english_songs
+    # return render_template('general/test.html', english_songs=english_songs)
+    # return render_template('admin/track_listing.html', english_songs=english_songs)
 
-    # return render_template('general/test.html')
+    return render_template(f'test/test_{test_id}.html', english_songs=english_songs)

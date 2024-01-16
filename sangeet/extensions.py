@@ -11,6 +11,14 @@ login_manager.blueprint_login_views = {
 }
 login_manager.login_message = 'You Need to Log in!'
 
+
+# extension for api - flask restful
+from flask_restful import Api
+api = Api()
+
+
+
+
 # # extension flask migration for tracking changes in the database (NOT ABLE TO MAKE IT WORK)
 # from flask_migrate import Migrate
 # migrate = Migrate()
@@ -19,7 +27,6 @@ login_manager.login_message = 'You Need to Log in!'
 
 
 # import functools
-
 # from flask import (
 #     Blueprint, flash, g, redirect, render_template, request, session, url_for
 # )

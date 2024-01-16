@@ -1,0 +1,16 @@
+{% extends appropriate_layout %}
+{% block page_title %}Test Page{% endblock %}
+{% block extra_css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block main %}
+
+{{appropriate_layout}}
+{{track_listing_template}}
+
+{% include track_listing_template %}
+
+{% endblock %}

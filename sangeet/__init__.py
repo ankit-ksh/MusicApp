@@ -1,12 +1,16 @@
 import os
 from flask import Flask
 from flask_login import current_user
-from .extensions import db
-from .extensions import login_manager
-# Followig import is for getting the user object for the user loader of flask login LoginManager
+from sangeet.extensions import db
+from sangeet.extensions import login_manager
+from sangeet.extensions import api
+# Following import is for getting the user object for the user loader of flask login LoginManager
 from sangeet.models import User
-
-
+# To register all api resources I need it all in this file so I need to import all the api blueprints outside the api function
+# for the normal web app functionality, it works even when being inside a function, but for APIs I'll have to keep it inside
+from sangeet.rest_api import general as general_api
+from sangeet.rest_api import admin as admin_api
+from sangeet.rest_api import creator as creator_api
 
 def create_app(test_config=None):
     # creating the flask app as an instance of the Flask Class
@@ -18,7 +22,6 @@ def create_app(test_config=None):
         # TEMPLATES_AUTO_RELOAD = True
         UPLOAD_FOLDER = "static/uploads"
     )
-
 
     # ensure instance folder exists
     try:
@@ -32,13 +35,15 @@ def create_app(test_config=None):
     with app.app_context():
         db.create_all()
 
-    # configuring flask login
+    # Intialising and configuring flask login
     login_manager.init_app(app)
     #loading the user
     @login_manager.user_loader
     def load_user(user_id):
         return db.session.get(User, int(user_id))
-
+    
+    # Intialising and configuring Flask Restful
+    api.init_app(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -51,17 +56,22 @@ def create_app(test_config=None):
     from .utils.configuration import inject_user_data
     app.context_processor(inject_user_data)
 
-    # registering the blueprints
-    from .views import auth
+    # registering the blueprints - for web application
+    from sangeet.views import auth
     app.register_blueprint(auth.bp)
-    from .views import general
+    from sangeet.views import general
     app.register_blueprint(general.bp)
-    from .views import creator
+    from sangeet.views import creator
     app.register_blueprint(creator.bp)
-    from .views import admin
+    from sangeet.views import admin
     app.register_blueprint(admin.bp)
-    from .views import music
+    from sangeet.views import music
     app.register_blueprint(music.bp)
+
+    # registering API blurprints
+    app.register_blueprint(general_api.bp)
+    app.register_blueprint(admin_api.bp)
+    app.register_blueprint(creator_api.bp)
 
 
     return app

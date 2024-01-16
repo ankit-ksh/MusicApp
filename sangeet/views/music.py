@@ -45,14 +45,28 @@ def language_tracks(language_name):
     tracks = [result for result in query_result]
     return render_template('general/list_all_songs.html', title=title, tracks=tracks)
 
-# query for different languages
+# page for albums
 @bp.route('/album/<int:album_id>')
-def album_tracks(album_id):
-    album = db.session.execute(db.select(Album).where(Album.id == album_id)).scalar()
-    query_result = album.tracks
-    title = f"All songs in Album - {album.name}"
-    tracks = [result for result in query_result]
-    return render_template('general/list_all_songs.html', title=title, tracks=tracks)
+def album_page(album_id):
+    try:
+        album = db.session.get(Album, album_id)
+        album_tracks = album.tracks
+    except:
+        return 'Something went wrong'
+    tracks = [result for result in album_tracks]
+    # return render_template('music/music_overview_page.html', english_tracks=tracks)
+    return 'hello'
+
+# page for playlists
+@bp.route('/playlist/<int:playlist_id>')
+def playlist_page(playlist_id):
+
+    playlist = db.session.get(Playlist, playlist_id)
+    playlist_tracks = playlist.tracks
+    tracks = [result for result in playlist_tracks]
+    # return render_template('music/music_overview_page.html', english_tracks=tracks)
+    return render_template('music/music_overview_page.html', context_specific_track_options="music/playlist_track_options.html", tracks=tracks, content=playlist)
+
 
 
 @bp.route('/play/<filename>')

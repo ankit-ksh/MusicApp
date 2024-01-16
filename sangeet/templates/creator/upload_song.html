@@ -9,7 +9,7 @@
             {% set flash_message_links={'My Songs':'/my_content/songs'} %}
             {% include 'includes/general/modal_flash_message.html' %}
         </div>
-        <form class="form-control vstack gap-2" action="/upload/song" method="post" enctype="multipart/form-data">
+        <form class="form-control vstack gap-2" action="/track/upload" method="post" enctype="multipart/form-data">
             <div class="hstack px-3 py-5 bg-success-subtle text-white rounded-2 sangeet-background">
                 <div class="h3 text-center">
                     Upload Song
@@ -32,6 +32,12 @@
                 <option selected>Genre</option>
                 {% for genre in genres %}
                     <option value="{{genre.id}}">{{genre.name}}</option>
+                {% endfor %}
+            </select>
+            <select name="album_id" class="form-select form-select-lg ">
+                <option selected>Assign Album</option>
+                {% for album in current_user.tracks %}
+                    <option value="{{album.id}}">{{album.name}}</option>
                 {% endfor %}
             </select>
             <div class="border border-light-subtle p-2 rounded-2">

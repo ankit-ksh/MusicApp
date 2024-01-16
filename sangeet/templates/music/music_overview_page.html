@@ -1,11 +1,62 @@
-{% extends 'music/music_overview_page.html' %}
+{% extends appropriate_layout %}
+{% from 'macros/general.html' import submit_info_icon %}
+{% block page_title %}Test Page{% endblock %}
+{% block extra_css %}
+<style>
+div.bordered:not(:last-child) {
+    border-bottom: 1px solid grey;
+}
 
-{% block any_relevant_things %}
+.custom-index-col {
+    width: 3%; /* Adjust the percentage based on your preference */
+}
 
+.custom-duration-col {
+    width: 5%; /* Adjust the percentage based on your preference */
+}
+.hidden-element {
+    display: none;
+}
+
+.song-row:hover .hidden-element {
+    display: block;
+}
+.song-row:hover .to-be-hidden-element {
+    display: none;
+}
+.song-row:hover {
+    background-color: aliceblue;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center border border-2 rounded-2 bg-success-subtle" style="height: 350px;">
+        <div class="col-3 text-center">
+            <img src="../../static/images/icons/adele.jpg" onerror="this.src='../../static/images/icons/alternate.avif'" style="width: 250px; height:250px; border-radius:5px;" alt="Artist Image">
+        </div>
+        <div class="col">
+            <div class="h2">{{content.name}}</div>
+            <div>Public • Curator</div>
+            <div>{{content.tracks | length}} Tracks</div> <br>
+            <div class="hstack gap-2">
+                <div class="border border-1 border-dark p-2 rounded rounded-pill" >
+                    <i class="bi bi-play-fill"></i> Play
+                </div>
+                <div class="border border-1 border-dark p-2 rounded rounded-pill">
+                    <i class="bi bi-plus-square-fill"></i> Save to library
+                </div>
+                <div><i class="bi bi-three-dots-vertical"></i></div>
+            </div>
+        </div>
+    </div>    
+</div>
 
 <div class="container mt-5 mb-3 pt-3 pb-2 border border-1 rounded-2 border">
     <div class="nav nav-tabs m-1">
-        <h2>Add Songs</h2>
+        <h2>Songs</h2>
     </div>
   
     {% for track in tracks %}
@@ -29,7 +80,7 @@
                     {{submit_info_icon("bi-star hidden-element", data={'track_id':1}, url="/test")}}
                 </div>
                 <!-- User specific options will be included here -->
-                {{submit_info_icon("bi-plus hidden-element", data={'track_id':track.id, 'playlist_id':playlist.id}, url="/playlist/append_track")}}
+                {% include context_specific_track_options %}
                 <div class="dropdown">
                     <!-- Here's just the trigger button for showing the modal to save the playlist. The actual modal is appended below becuase keeping everthing (button and modal) doesn't work -->
                     <div class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -90,5 +141,16 @@
             </div>
         </div>
     {% endfor %}
+    {% set show_all_btn=True %}
+    {% if show_all_btn %}
+
+        <a class="btn btn-success btn-sm rounded-2 p-2 m-1 d-inline-block text-decoration-none" href="/hello">
+            Show all
+        </a>
+
+    {% endif %}
+    
+</div>
+{% block any_relevant_things %}{% endblock %}
 
 {% endblock %}
