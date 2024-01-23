@@ -1,5 +1,5 @@
 {% extends appropriate_layout %}
-{% from 'macros/general.html' import submit_info_icon %}
+{% from 'macros/general.html' import submit_form_icon_POST %}
 {% block page_title %}Test Page{% endblock %}
 {% block extra_css %}
 <style>
@@ -76,7 +76,7 @@ div.bordered:not(:last-child) {
             </div>
             <div class="col-2 hstack gap-3 text-center">
                 <div>
-                    {{submit_info_icon("bi-star hidden-element", data={'track_id':1}, url="/test")}}
+                    {{submit_form_icon_POST("bi-star hidden-element", data={'track_id':1}, url="/test")}}
                 </div>
                 <!-- User specific options will be included here -->
                 {% block user_specific_options %}{% endblock %}

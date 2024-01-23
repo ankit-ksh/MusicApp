@@ -1,19 +1,18 @@
 #! /usr/bin/bash
 
-# activate virtual environment
+# setting up virtual environment
 if [ -d ".sangeet_app_venv" ]; then
-	source .sangeet_app_venv/bin/activate
-	echo "Virtual environment enabled"
+	echo "Virtual environment already setup. Run the script run to start the app"
 else
-	echo "No virtual environment setup. Please run setup first"
-	exit
+	echo "No virtual environment set up. Setting up Virtual environment. Please ensure Python and pip is installed"
+	python -m venv .sangeet_app_venv
+	echo
+	echo "Activating virtual environment"
+	source .sangeet_app_venv/bin/activate
+	echo
+	echo "Now installing all packages listed in requirements.txt"
+	pip3 install -r requirements.txt
+	echo
+	echo "All set up. Now run the script run to start the app"
 fi
-pip freeze > requirements.txt
 
-# set environment variables
-export FLASK_APP=sangeet
-
-if [ "$1" == 'r' ]; then
-	echo "Starting the application Sangeet"
-	flask run --debug
-fi

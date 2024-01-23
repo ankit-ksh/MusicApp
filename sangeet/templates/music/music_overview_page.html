@@ -1,33 +1,9 @@
 {% extends appropriate_layout %}
-{% from 'macros/general.html' import submit_info_icon %}
+{% from 'macros/general.html' import submit_form_icon_POST %}
+
 {% block page_title %}Test Page{% endblock %}
 {% block extra_css %}
-<style>
-div.bordered:not(:last-child) {
-    border-bottom: 1px solid grey;
-}
-
-.custom-index-col {
-    width: 3%; /* Adjust the percentage based on your preference */
-}
-
-.custom-duration-col {
-    width: 5%; /* Adjust the percentage based on your preference */
-}
-.hidden-element {
-    display: none;
-}
-
-.song-row:hover .hidden-element {
-    display: block;
-}
-.song-row:hover .to-be-hidden-element {
-    display: none;
-}
-.song-row:hover {
-    background-color: aliceblue;
-}
-</style>
+    <link rel="stylesheet" href="/static/css/music_listing_pages.css">
 {% endblock %}
 
 {% block main %}
@@ -38,17 +14,21 @@ div.bordered:not(:last-child) {
             <img src="../../static/images/icons/adele.jpg" onerror="this.src='../../static/images/icons/alternate.avif'" style="width: 250px; height:250px; border-radius:5px;" alt="Artist Image">
         </div>
         <div class="col">
-            <div class="h2">{{content.name}}</div>
+            <div class="h2">
+                {% block page_name %}
+                    {{content.name.capitalize()}}
+                {% endblock %}
+            </div>
             <div>Public • Curator</div>
-            <div>{{content.tracks | length}} Tracks</div> <br>
+            <div>{{content.tracks | length}} Tracks</div>
+            <div class="hstack gap-3 lead py-2">
+                {% block extra_options %}{% endblock %}
+            </div>
             <div class="hstack gap-2">
-                <div class="border border-1 border-dark p-2 rounded rounded-pill" >
+                <div class="border border-1 border-dark p-2 rounded rounded-2" >
                     <i class="bi bi-play-fill"></i> Play
                 </div>
-                <div class="border border-1 border-dark p-2 rounded rounded-pill">
-                    <i class="bi bi-plus-square-fill"></i> Save to library
-                </div>
-                <div><i class="bi bi-three-dots-vertical"></i></div>
+                <div style="font-size: 30px;"><i class="bi bi-three-dots-vertical"></i></div>
             </div>
         </div>
     </div>    
@@ -59,96 +39,13 @@ div.bordered:not(:last-child) {
         <h2>Songs</h2>
     </div>
   
-    {% for track in tracks %}
-
-        <div class="row gap-3 justify-content-evenly align-items-center p-2 bordered rounded m-1 song-row">
-            <div class=" custom-index-col">
-                <span class="to-be-hidden-element">{{loop.index}}</span>
-                <span class="hidden-element"><i class="bi bi-play-circle-fill"></i></span>
-            </div>
-            <div class="col text-truncate">
-                {{track.name}}
-            </div>
-            <div class="col text-truncate">
-                {{track.artist}}
-            </div>
-            <div class="col text-truncate">
-                {{track.album}}
-            </div>
-            <div class="col-2 hstack gap-3 text-center">
-                <div>
-                    {{submit_info_icon("bi-star hidden-element", data={'track_id':1}, url="/test")}}
-                </div>
-                <!-- User specific options will be included here -->
-                {% include context_specific_track_options %}
-                <div class="dropdown">
-                    <!-- Here's just the trigger button for showing the modal to save the playlist. The actual modal is appended below becuase keeping everthing (button and modal) doesn't work -->
-                    <div class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-three-dots-vertical hidden-element"></i>
-                    </div>
-                    <ul class="dropdown-menu">
-                    <li>
-                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-for-pl-{{track.id}}">
-                            <i class="bi bi-plus-square text-decoration-none"></i> Save to playlist
-                        </button>
-                    </li>
-                    <li><a class="dropdown-item" href="/music/artist/{{track.creator.id}}"><i class="bi bi-person"></i> Go to artist</a></li>
-                    <li><a class="dropdown-item" href="/music/album/{{track.album.id}}"><i class="bi bi-disc"></i> Go to Album</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="custom-duration-col text-end">
-                {{track.duration}}
-            </div>
-        </div>
-
-        <!-- Modal to save the playlist dropdown-item -->
-        <div class="modal" id="modal-for-pl-{{track.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Save to playlist</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul style="list-style: none;">
-                        {% for playlist in current_user.playlists %}
-                            {% if track in playlist.tracks %}
-                                {% set link_for_playlist="/playlist/remove_track" %}
-                            {% else %}
-                                {% set link_for_playlist="/playlist/append_track" %}
-                            {% endif %}
-                            <li class="ms-2">
-                                <form action={{link_for_playlist}} method="post">
-                                    {% if track in playlist.tracks %}
-                                        <input type="checkbox" checked>
-                                    {% else %}
-                                        <input type="checkbox">
-                                    {% endif %}
-                                    <input type="hidden" name="action" value="append_track">
-                                    <input type="hidden" name="track_id" value="{{track.id}}">
-                                    <input type="hidden" name="playlist_id" value="{{playlist.id}}">
-                                    <button class="btn btn-sm btn-{{color}}" type="submit"><h5>{{playlist.name}}</h5></button>
-                                </form>
-                            </li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                <a type="button" class="btn btn-primary" href="/playlist/create"><i class="bi bi-plus-lg"></i> New playlist</a>
-                </div>
-            </div>  
-            </div>
-        </div>
+    {% for single_track_data in tracks.values() %}
+        {% set track = single_track_data['track'] %}
+        {% include track_listing_template %}
     {% endfor %}
-    {% set show_all_btn=True %}
-    {% if show_all_btn %}
-
-        <a class="btn btn-success btn-sm rounded-2 p-2 m-1 d-inline-block text-decoration-none" href="/hello">
-            Show all
-        </a>
-
-    {% endif %}
+    <a style="width: 100px;" class="btn btn-success btn-sm rounded-2 p-2 m-2 d-inline-block text-decoration-none" href="/music/all/{{main_category}}/{{content.id}}">
+        Show all
+    </a>
     
 </div>
 {% block any_relevant_things %}{% endblock %}

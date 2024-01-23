@@ -49,14 +49,15 @@ def logout():
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        user_name = request.form['user_name']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        password = request.form['password']
-        try:
-            isCreator = request.form['isCreator']
+        user_name = request.form.get('user_name')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        password = request.form.get('password')
+
+        isCreator = request.form.get('isCreator')
+        if isCreator:
             role = 'creator'
-        except:
+        else:
             role = 'user'
 
         # Server side validation for empty inputs
@@ -70,7 +71,13 @@ def register():
             return redirect(url_for('auth.register'))
 
         # if no user exist with these details, add the user data to database
-        new_user = User(user_name=user_name, first_name=first_name, last_name=last_name, password=password, role=role)
+        if role == 'user':
+            new_user = User(user_name=user_name, first_name=first_name, last_name=last_name, password=password)
+        elif role == 'creator':
+            new_user = Creator(user_name=user_name, first_name=first_name, last_name=last_name, password=password)
+        elif role == 'admin':
+            new_user = Admin(user_name=user_name, first_name=first_name, last_name=last_name, password=password)
+
         db.session.add(new_user)
         db.session.commit()
         flash('Account Created Succesfully! Log in Now', 'success')

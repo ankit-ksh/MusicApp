@@ -1,14 +1,48 @@
 {% extends appropriate_layout %}
 {% set library_link = 'active' %}
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/music_listing_pages.css">
+{% endblock %}
 
 {% block main %}
 
-<!-- Include flash messages -->
-<div class="m-0 p-0">
-    {% include 'includes/general/modal_flash_message.html' %}
-    {% include 'music/playlist_listings.html' %}
-</div>
+<div class="container mt-5 mb-3 pt-3 pb-2 border border-1 rounded-2 border">
+    <div class="nav nav-tabs m-1">
+        <h2>Your Playlists</h2>
+        <div class="ms-auto underline_on_hover hstack gap-3">
+            <a href="/playlist/create" class="lead ms-auto">Create a New Playlist</a>
+            <a href="{{link_address}}" class="lead ms-auto">All Playlists</a>
+        </div>
+    </div>
 
+    {% if current_user.playlists %}
+    <div class="m-2 hstack gap-3 overflow-auto">
+        {% for playlist in current_user.playlists %}
+            <div>
+                {% include 'music/playlist/playlist_card.html' %}
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="lead text-center p-5 mt-5 border">
+            You don't have any playlists
+        </div>
+    {% endif %}
+    <br><br>
+
+    <div class="nav nav-tabs m-1">
+        <h2>Tracks you've rated</h2>
+    </div>
+    <div class="m-2 hstack gap-3 overflow-auto">
+        {% for i in range(6) %}
+            <div>
+                {% include 'music/track/track_card.html' %}
+            </div>
+        {% endfor %}
+    </div>
+
+
+</div>
 
 
 {% endblock %}

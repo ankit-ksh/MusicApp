@@ -18,7 +18,7 @@
             <!-- Player for the album -->
         </a>
         <div class="col-sm-4 ms-auto hstack gap-2">
-            {{ general_macros.submit_info(label='Add to Library', value=album.id, url='/album/add_to_library', color='dark')}}
+            {{ general_macros.submit_form_button_POST(label='Add to Library', value=album.id, url='/album/add_to_library', color='dark')}}
             <!-- Admin or Creator specific actions -->
             <div class="hstack gap-1">
                 {% if current_user.role=='admin' %}

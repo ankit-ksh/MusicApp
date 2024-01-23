@@ -20,7 +20,7 @@
             </div>
         </a>
         <div class="col dropdown ms-auto">
-            {{ general_macros.submit_info(label='Edit', data={'playlist_id':playlist.id}, url="/edit_playlist", color='primary')}}
+            {{ general_macros.submit_form_button_POST(label='Edit', data={'playlist_id':playlist.id}, url="/edit_playlist", color='primary')}}
         </div>
     </div>    
     <!-- end long items of songs -->

@@ -1,14 +1,13 @@
-{% macro submit_info(label, data, url, color) %}
+{% macro submit_form_button_POST(label, data, url, color) %}
     <form action="{{url}}" method="post">
     {% for entry in data %}
             <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
     {% endfor %}
     <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
     </form>
-
 {% endmacro %}
 
-{% macro submit_info_icon(icon_class, data, url) %}
+{% macro submit_form_icon_POST(icon_class, data, url) %}
     <form action="{{url}}" method="post">
     {% for entry in data %}
             <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
@@ -17,5 +16,26 @@
         <i type="submit" class="bi {{icon_class}}"></i>
     </button>
     </form>
+{% endmacro %}
 
+
+
+{% macro submit_form_button_GET(label, data, url, color) %}
+    <form action="{{url}}" method="get">
+    {% for entry in data %}
+            <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
+    {% endfor %}
+    <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
+    </form>
+{% endmacro %}
+
+{% macro submit_form_icon_GET(icon_class, data, url) %}
+    <form action="{{url}}" method="get">
+    {% for entry in data %}
+            <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
+    {% endfor %}
+    <button type="submit hidden" style="border: none; background: none; outline:none; cursor: pointer; padding: 0;">
+        <i type="submit" class="bi {{icon_class}}"></i>
+    </button>
+    </form>
 {% endmacro %}

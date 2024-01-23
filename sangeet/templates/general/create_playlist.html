@@ -1,0 +1,38 @@
+{% extends appropriate_layout %}
+
+{% block main %}
+
+<div class="container">
+    <div class="col-md-6 mx-auto">
+        <form class="form-control vstack gap-2" action="/playlist/create" method="post" enctype="multipart/form-data">
+            <div class="hstack px-3 py-5 bg-success-subtle text-white rounded-2 sangeet-background">
+                <div class="h3 text-center">
+                    Create Playlist
+                </div>
+                <div class="ms-auto">
+                    <button type="submit" class="btn btn btn-success">Create</button>
+                </div>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="playlist_name" name="playlist_name" placeholder="playlist name" type="text" required>
+                <label class="form-label" for="playlist_name">Playlist name</label>
+            </div>
+            <!-- hidden input for curator_id -->
+            <input hidden name="curator_id" value="{{current_user.id}}" type="text">
+            <div class="form-control">
+                <fieldset>
+                    <legend class="border border-2 rounded-3 bg-primary-subtle text-center">Select songs to add to the playlist</legend>
+                    {% for track in track_list %}
+                    <div>
+                        <input name="track_id_{{track.id}}" value="{{track.id}}" id="select_track_{{track.id}}" type="checkbox">
+                        <label class="form-label" for="select_track_{{track.id}}">{{track.name}}</label>
+                    </div>
+                    {% endfor %}
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock main %}

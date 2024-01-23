@@ -1,9 +1,0 @@
-{% extends 'music/track_listing_new.html' %}
-{% from 'macros/general.html' import submit_info_icon %}
-{% block user_specific_options %}
-
-{{submit_info_icon("bi-pencil hidden-element", data={'track_id':1}, url="/test")}}
-{{submit_info_icon("bi-trash hidden-element", data={'track_id':1}, url="/test")}}
-
-
-{% endblock %}

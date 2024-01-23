@@ -1,0 +1,253 @@
+import sangeet
+from sangeet.models import *
+app = sangeet.create_app()
+app.app_context().push()
+
+def add_music_data_to_db(music_data):
+    for song_data in music_data:
+        track = Track(
+            name=song_data["name"],
+            file_name=song_data["file_name"],
+            artist_name=song_data["artist_name"],
+            times_played=song_data.get("times_played", 0),
+            rating=song_data.get("rating", 0),
+            is_flagged=song_data.get("is_flagged", False),
+            file_path=song_data.get("file_path", "#"),
+            upload_date=datetime.now(),
+            release_date=datetime.now(),
+            duration=song_data["duration"],
+            genre_id=song_data.get("genre_id"),
+            creator_id=song_data.get("creator_id"),
+            album_id=song_data.get("album_id"),
+            language_id=song_data.get("language_id"),
+            artist_id=song_data.get("artist_id"),
+        )
+
+        db.session.add(track)
+
+    db.session.commit()
+
+def add_language(language_data):
+    for language in language_data:
+        language = Language(
+            name=language["name"],
+        )
+        db.session.add(language)
+    db.session.commit()
+
+def add_genre(genre_data):
+    for genre in genre_data:
+        genre = Genre(
+            name=genre["name"],
+        )
+        db.session.add(genre)
+    db.session.commit()
+
+def add_users(user_data):
+    c = user_data[0]
+    a = user_data[1]
+    u = user_data[2]
+    creator = Creator(user_name=c['user_name'], first_name=c['first_name'], password=c['password'])
+    admin = Admin(user_name=a['user_name'], first_name=a['first_name'], password=a['password'])
+    user = User(user_name=u['user_name'], first_name=u['first_name'], password=u['password'])
+    db.session.add(creator)
+    db.session.add(admin)
+    db.session.add(user)
+    db.session.commit()
+
+
+sample_music_data = [
+    {
+        "name": "Shape of You",
+        "file_name": "shape_of_you.mp3",
+        "artist_name": "Ed Sheeran",
+        "genre_id": 1,  # Assuming genre_id 1 corresponds to Pop
+        "creator_id": 1,  # Assuming creator_id 1 corresponds to a specific creator
+        "album_id": 1,  # Assuming album_id 1 corresponds to a specific album
+        "file_path": "/path/to/shape_of_you.mp3",
+        "language_id": 1,  # Assuming language_id 1 corresponds to English
+        "artist_id": 1,  # Assuming artist_id 1 corresponds to Ed Sheeran
+        "duration": "3:53",
+    },
+    {
+        "name": "Someone You Loved",
+        "file_name": "someone_you_loved.mp3",
+        "artist_name": "Lewis Capaldi",
+        "genre_id": 1,
+        "creator_id": 1,
+        "album_id": 2,  # Assuming album_id 2 corresponds to another specific album
+        "file_path": "/path/to/someone_you_loved.mp3",
+        "language_id": 1,
+        "artist_id": 2,  # Assuming artist_id 2 corresponds to Lewis Capaldi
+        "duration": "3:02",
+    },
+    {
+        "name": "Blinding Lights",
+        "file_name": "blinding_lights.mp3",
+        "artist_name": "The Weeknd",
+        "genre_id": 1,
+        "creator_id": 1,
+        "album_id": 3,  # Assuming album_id 3 corresponds to another specific album
+        "file_path": "/path/to/blinding_lights.mp3",
+        "language_id": 1,
+        "artist_id": 3,  # Assuming artist_id 3 corresponds to The Weeknd
+        "duration": "3:20",
+    },
+    # Repeat the structure for other songs
+    # ...
+]
+
+sample_music_data = [
+    {
+        "name": "Shape of You",
+        "file_name": "shape_of_you.mp3",
+        "artist_name": "Ed Sheeran",
+        "times_played": 100,
+        "rating": 4.5,
+        "is_flagged": False,
+        "file_path": "/path/to/shape_of_you.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "3:53",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Someone You Loved",
+        "file_name": "someone_you_loved.mp3",
+        "artist_name": "Lewis Capaldi",
+        "times_played": 150,
+        "rating": 4.7,
+        "is_flagged": False,
+        "file_path": "/path/to/someone_you_loved.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "3:02",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Blinding Lights",
+        "file_name": "blinding_lights.mp3",
+        "artist_name": "The Weeknd",
+        "times_played": 120,
+        "rating": 4.9,
+        "is_flagged": False,
+        "file_path": "/path/to/blinding_lights.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "3:20",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Uptown Funk",
+        "file_name": "uptown_funk.mp3",
+        "artist_name": "Mark Ronson ft. Bruno Mars",
+        "times_played": 200,
+        "rating": 4.8,
+        "is_flagged": False,
+        "file_path": "/path/to/uptown_funk.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "4:30",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Dance Monkey",
+        "file_name": "dance_monkey.mp3",
+        "artist_name": "Tones and I",
+        "times_played": 180,
+        "rating": 4.6,
+        "is_flagged": False,
+        "file_path": "/path/to/dance_monkey.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "3:30",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Havana",
+        "file_name": "havana.mp3",
+        "artist_name": "Camila Cabello ft. Young Thug",
+        "times_played": 160,
+        "rating": 4.5,
+        "is_flagged": False,
+        "file_path": "/path/to/havana.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "3:38",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Despacito",
+        "file_name": "despacito.mp3",
+        "artist_name": "Luis Fonsi ft. Daddy Yankee",
+        "times_played": 220,
+        "rating": 4.9,
+        "is_flagged": False,
+        "file_path": "/path/to/despacito.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "3:48",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+    {
+        "name": "Sicko Mode",
+        "file_name": "sicko_mode.mp3",
+        "artist_name": "Travis Scott",
+        "times_played": 190,
+        "rating": 4.7,
+        "is_flagged": False,
+        "file_path": "/path/to/sicko_mode.mp3",
+        "upload_date": datetime.now(),
+        "release_date": datetime.now(),
+        "duration": "5:12",
+        "creator_id": 2,
+        "genre_id": 1,
+        "language_id": 1,
+        "album_id": 1,
+    },
+]
+
+
+language_data = [
+    {'name':'english'},
+    {'name': 'tamil'},
+    {'name': 'hindi'}
+]
+
+genre_data = [
+    {'name': 'pop'},
+    {'name': 'rock'},
+    {'name': 'devotional'}
+]
+user_data = [
+    {'user_name': 'c', 'first_name': 'c', 'password': 'c'},
+    {'user_name': 'a', 'first_name': 'a', 'password': 'a'},
+    {'user_name': 'u', 'first_name': 'u', 'password': 'u'}
+]
+
+
+add_music_data_to_db(sample_music_data)
+add_language(language_data)
+add_genre(genre_data)
+add_users(user_data)

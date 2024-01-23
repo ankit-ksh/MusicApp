@@ -1,0 +1,20 @@
+{% extends appropriate_layout %}
+{% from 'macros/general.html' import submit_form_icon_POST %}
+{% block page_title %}Test Page{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/music_listing_pages.css">
+{% endblock %}
+
+{% block main %}
+<div style="min-height: 35rem;" class="container mt-5 mb-3 pt-3 pb-2 border border-1 rounded-2 border">
+    <div class="nav nav-tabs m-1">
+        <h2>{{title}}</h2>
+    </div>
+  
+    {% for single_track_data in tracks.values() %}
+        {% set track = single_track_data['track'] %}
+        {% include track_listing_template %}
+    {% endfor %}
+</div>
+
+{% endblock %}

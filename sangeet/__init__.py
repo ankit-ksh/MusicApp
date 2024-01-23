@@ -11,6 +11,8 @@ from sangeet.models import User
 from sangeet.rest_api import general as general_api
 from sangeet.rest_api import admin as admin_api
 from sangeet.rest_api import creator as creator_api
+from sangeet.views import auth, general, creator, admin, music, playlist
+
 
 def create_app(test_config=None):
     # creating the flask app as an instance of the Flask Class
@@ -20,7 +22,7 @@ def create_app(test_config=None):
         SQLALCHEMY_DATABASE_URI = "sqlite:///sangeet.sqlite3",
         SQLALCHEMY_TRACK_MODIFICATIONS = True, # False in production to increase performance, True in development for reloading without restarting the server
         # TEMPLATES_AUTO_RELOAD = True
-        UPLOAD_FOLDER = "static/uploads"
+        UPLOAD_FOLDER = "sangeet/static/user_data/track_uploads"
     )
 
     # ensure instance folder exists
@@ -51,22 +53,19 @@ def create_app(test_config=None):
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
+    
 
     # registering the context processors
-    from .utils.configuration import inject_user_data
-    app.context_processor(inject_user_data)
+    from .utils.configuration import inject_user_based_data
+    app.context_processor(inject_user_based_data)
 
     # registering the blueprints - for web application
-    from sangeet.views import auth
     app.register_blueprint(auth.bp)
-    from sangeet.views import general
     app.register_blueprint(general.bp)
-    from sangeet.views import creator
     app.register_blueprint(creator.bp)
-    from sangeet.views import admin
     app.register_blueprint(admin.bp)
-    from sangeet.views import music
     app.register_blueprint(music.bp)
+    app.register_blueprint(playlist.bp)
 
     # registering API blurprints
     app.register_blueprint(general_api.bp)

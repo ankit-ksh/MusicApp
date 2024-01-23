@@ -1,0 +1,11 @@
+{% extends 'music/general_track_listing.html' %}
+{% from 'macros/general.html' import submit_form_icon_POST %}
+{% block user_specific_options %}
+
+{{submit_form_icon_POST("bi-minus hidden-element", data={'track_id':1}, url="/test")}}
+
+{% if music_specific_options %}
+    {% include music_specific_options %}
+{% endif %}
+
+{% endblock %}

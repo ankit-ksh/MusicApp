@@ -1,3 +1,6 @@
+# Don't exclude any subdirectory structure
+!/*/
+
 tmp/
 .config/
 test_app/
@@ -8,10 +11,12 @@ test_app/
 __pycache__/
 
 
-instance/
-sangeet/static/music/
-sangeet/static/user_data/
-sangeet/static/sangeet_data/
+instance/*
+sangeet/static/music/*
+sangeet/static/user_data/*/*
+# Don't exclude directories themselves
+!sangeet/static/user_data/*/
+
 
 
 .pytest_cache/

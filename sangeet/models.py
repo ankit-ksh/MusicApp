@@ -2,6 +2,8 @@ from .extensions import db
 from .extensions import login_manager
 from flask_login import UserMixin
 from datetime import datetime
+from sqlalchemy.ext.hybrid import hybrid_property
+
 
 # Association table for many to many relationship between Playlist and Tracks table
 track_playlist = db.Table(
@@ -24,42 +26,50 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(10), nullable=False)
     profile_pic_src = db.Column(db.String(50), nullable=True)
-    # for a polymorphic relationship
-    __mapper_args__ = {
-        'polymorphic_identity': 'user',
-        'polymorphic_on': role
-    }
     ## ----------------------Relationships -------------------------
     # establish relationship with Playlist table One to Many
     playlists = db.relationship('Playlist', back_populates='curator', cascade="all, delete")
     # establish relationship with Track table for Knowing the likes of a user and also to know about the users who liked a particular song - Many to Many
     liked_tracks = db.relationship('Track', secondary=user_liked_tracks, back_populates='liked_by')
-    
-class Playlist(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), nullable=False)
-    ## ----------------------Relationships -------------------------
-    # establish relationship with User table - Many to One
-    curator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    curator = db.relationship('User', back_populates='playlists')
-    # establish relationshiop with Track table - Many to Many
-    tracks = db.relationship('Track', secondary=track_playlist, back_populates='belongs_to_playlist')
+    # to be able to access user.name
+    @hybrid_property
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+    # for a polymorphic relationship
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': 'role'
+    }
 
 class Creator(User):
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     is_blacklisted = db.Column(db.Boolean, unique=False, default=False)
-    # polymorphic identity of creator
-    __mapper_args__ = {"polymorphic_identity": "creator"}
     ## ----------------------Relationships -------------------------
     # relationship with Track table - One to Many
     tracks = db.relationship('Track', back_populates='creator', cascade="all, delete")
     # relationship with Album table - One to Many
     albums = db.relationship('Album', back_populates='creator', cascade="all, delete")
 
+    # polymorphic identity of creator
+    __mapper_args__ = {"polymorphic_identity": "creator"}
+
 class Admin(User):
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    # polymorphic identity of creator
+    # polymorphic identity of admin
     __mapper_args__ = {"polymorphic_identity": "admin"}
+
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    is_public = db.Column(db.Boolean, unique=False, default=True)
+    ## ----------------------Relationships -------------------------
+    # establish relationship with User table - Many to One
+    curator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    curator = db.relationship('User', back_populates='playlists')
+    # establish relationshiop with Track table - Many to Many
+    tracks = db.relationship('Track', secondary=track_playlist, back_populates='belongs_to_playlist')
 
 class Artist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -103,7 +113,9 @@ class Track(db.Model):
     rating = db.Column(db.Float, default=0, index=True)
     is_flagged = db.Column(db.Boolean, unique=False, default=False)
     file_path = db.Column(db.String(200), default='#')
+    upload_date = db.Column(db.DateTime, default=datetime.now())
     release_date = db.Column(db.DateTime, default=datetime.now())
+    duration = db.Column(db.String)
     ## ----------------------Relationships -------------------------
     # relationship with Genre table - Many to One
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'), nullable=True)
