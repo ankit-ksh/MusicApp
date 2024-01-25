@@ -28,17 +28,14 @@
                     <a class="nav-link {{home_link}}" href="/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{explore_link}}" href="/explore">Explore</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link {{library_link}}" href="/library">Library</a>
                 </li>
                 {% block extra_left_nav_options %}
                 {% endblock extra_left_nav_options %}
             </ul>
             <!-- search bar -->
-            <form class="d-flex me-5" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex me-5" role="search" method="get" action="/search">
+                <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
             <!-- Profile details and other options, based on the user type -->
@@ -46,7 +43,7 @@
                 {% if current_user.profile_pic_src %}
                     <img class="show-profile-pic nav-link text-white dropdown-toggle d-inline" data-bs-toggle="dropdown" href="#" role="button" src="../../static/user_data/profile_picture/{{current_user.id}}.jpg" alt="">
                 {% else %}
-                    <div class="nav-link text-white dropdown-toggle d-inline" data-bs-toggle="dropdown">
+                    <div class="show-profile-pic nav-link text-white dropdown-toggle d-inline" data-bs-toggle="dropdown">
                         <svg version="1.1"
                         width="40" height="40"
                         xmlns="http://www.w3.org/2000/svg">
@@ -64,7 +61,7 @@
                     <!-- Anything else that may need to be added based on the user type. For example for user it will be register as creator -->
                     {% block role_specific_info %}
                     {% endblock %}
-                    <li><a class="dropdown-item" href="/{{current_user.role}}/preferences">Preferences</a></li>
+                    <li><a class="dropdown-item" href="/preferences">Preferences</a></li>
                     <li><a href="/logout" class="dropdown-item">Logout</a></li>
                 </ul>
             </div>

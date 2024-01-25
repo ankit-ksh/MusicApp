@@ -52,14 +52,14 @@ def playlist_page(**kwargs):
     playlist = db.session.get(Playlist, playlist_id)
     playlist_tracks = playlist.tracks
     tracks = [result for result in playlist_tracks]
-    tracks = refine_track_data(tracks, page_type='playlist', playlist=playlist)
     template_data = dict(
-        tracks=tracks,
-        content=playlist,
+        tracks = refine_music_data(tracks=tracks, page_type='playlist', playlist=playlist).get('tracks'),
+        music_collection = refine_music_data(music_collection=playlist).get('music_collection'),
+        # content=playlist,
         main_category='playlist',
         # music_access=music_access
     )
-    return render_template('music/playlist/playlist_overview_page.html', **template_data)
+    return render_template('music/real_music_overview_page.html', **template_data)
 
 # to modify any playlist's data | U & D in CRUD
 @bp.route('/modify/<action>', methods=['GET', 'POST'])
@@ -95,6 +95,3 @@ def modify_playlist(action):
         abort(501)
     return redirect(request.referrer)
 
-@bp.route('/test/<string>')
-def test(**kwargs):
-    return kwargs

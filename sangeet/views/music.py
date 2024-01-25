@@ -1,6 +1,7 @@
 from flask import (
     Blueprint, redirect, render_template, request, session, url_for, flash, send_from_directory, current_app
 )
+import os
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import (
     login_user,
@@ -29,48 +30,21 @@ def query_a_table(info_dict):   # function for showing any content overview and 
     content['items'] = query_result
     return content
 
-# # Query Tracks table for different genres
-# @bp.route('/genre/<category>')
-# def genre_based_tracks(category):
-#     info_dict = {'title' : f"All {category.capitalize()} Songs", 'table': Track, 'filter_by': 'genre', 'value':category}    
-#     if category == 'all':
-#         info_dict['filter_by'] = 'all'
-#     content = query_a_table(info_dict)
-#     return render_template('general/list_all_songs.html', title=info_dict['title'], tracks=content['items'])
 
-# # query for different languages
-# @bp.route('/language/<language_name>')
-# def language_tracks(language_name):
-#     title = f"All {language_name} songs"
-#     language = db.session.execute(db.select(Language).where(Language.name == language_name)).scalar()
-#     query_result = language.tracks
-#     tracks = [result for result in query_result]
-#     return render_template('music/music_overview_page.html', content=language, tracks=tracks)
-
-# # page for albums
-# @bp.route('/album/<int:album_id>')
-# def album_page(album_id):
-#     try:
-#         album = db.session.get(Album, album_id)
-#         album_tracks = album.tracks
-#     except:
-#         return 'Something went wrong'
-#     tracks = [result for result in album_tracks]
-#     return render_template('music/music_overview_page.html', tracks=tracks, content=album, context_specific_track_options='layouts/empty_page.html')
-
-
-
-
+# all playlists, albums or genres, any resource. It can even be all users for admin's info
 @bp.route('/all/<content_type>')
 @login_required
 def all_content(content_type):
     if content_type == 'tracks':
         query_result = db.session.execute(db.select(Track)).scalars()
         tracks = [entry for entry in query_result]
-        tracks = refine_track_data(tracks)
-        return render_template('music/all_music_page.html', tracks=tracks, title="All tracks on Sangeet")
+        template_data = dict(
+            tracks = refine_music_data(tracks=tracks)['tracks'],
+            title="All tracks on Sangeet"
+        )
+        return render_template('music/all_music_page.html', **template_data)
 
-# show all of a category
+# show overview of a category
 @bp.route('/<category>/<category_id>')
 @login_required
 def overview_of_category(category, category_id):
@@ -84,15 +58,15 @@ def overview_of_category(category, category_id):
     if category in category_dict:
         content = db.session.get(category_dict.get(category), category_id)
         tracks = content.tracks[:10]
-        return render_template(
-            'music/music_overview_page.html', **dict(
-            tracks=refine_track_data(tracks),
+        template_data = dict(
+            tracks=refine_music_data(tracks=tracks).get('tracks'),
+            music_collection=refine_music_data(music_collection=content)['music_collection'],
             main_category = category,
-            content = content
-            ))
+            )
+        return render_template('music/real_music_overview_page.html', **template_data)
+            
 
-
-# show all of a category
+# show all items of a category
 @bp.route('/all/<category>/<category_id>')
 @login_required
 def all_content_of_category(category, category_id):
@@ -106,13 +80,22 @@ def all_content_of_category(category, category_id):
     if category in category_dict:
         category_object = db.session.get(category_dict.get(category), category_id)
         tracks = category_object.tracks
-        tracks = refine_track_data(tracks)
-        return render_template(
-            'music/all_music_page.html', **dict(
+        tracks = refine_music_data(tracks=tracks).get('tracks')
+        print(tracks)
+        template_data = dict(
             tracks=tracks,
-            title = f"All tracks : {category_object.name.capitalize()}"
-            ))
+            title = f"All tracks [{category_object.__tablename__.capitalize()}] : {category_object.name.capitalize()}"
+            )
+        return render_template('music/all_music_page.html', **template_data)
 
-@bp.route('/play/<filename>')
-def play_song(filename):
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+@bp.route('/serve/<int:track_id>')
+@login_required
+def server(track_id):
+    track = db.session.get(Track, track_id)
+    abs_music_dir = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'])
+    return send_from_directory(abs_music_dir, track.file_name)
+
+@bp.route('/player/<int:track_id>')
+def player(track_id):
+    track = db.session.get(Track, track_id)
+    return render_template('music/player.html', track=track, lyrics=track.lyrics)

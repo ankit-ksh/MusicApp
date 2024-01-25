@@ -10,11 +10,17 @@
     <div class="nav nav-tabs m-1">
         <h2>{{title}}</h2>
     </div>
-  
-    {% for single_track_data in tracks.values() %}
-        {% set track = single_track_data['track'] %}
-        {% include track_listing_template %}
-    {% endfor %}
+    {% if tracks %}
+        {% for single_track_data in tracks %}
+            {% set track = single_track_data['track'] %}
+            {% include track_listing_template %}
+        {% endfor %}
+    {% else %}
+        <div class="lead text-center mt-5" style="min-height: 5rem;">
+            No Tracks
+        </div>
+    {% endif %}
+
 </div>
 
 {% endblock %}

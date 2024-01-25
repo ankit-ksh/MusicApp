@@ -17,9 +17,9 @@
 
     {% if current_user.playlists %}
     <div class="m-2 hstack gap-3 overflow-auto">
-        {% for playlist in current_user.playlists %}
+        {% for item in current_user.playlists %}
             <div>
-                {% include 'music/playlist/playlist_card.html' %}
+                {% include 'music/music_item_cards/playlist.html' %}
             </div>
         {% endfor %}
     </div>
@@ -34,9 +34,9 @@
         <h2>Tracks you've rated</h2>
     </div>
     <div class="m-2 hstack gap-3 overflow-auto">
-        {% for i in range(6) %}
+        {% for item in user_rated_items %}
             <div>
-                {% include 'music/track/track_card.html' %}
+                {% include 'music/music_item_cards/track.html' %}
             </div>
         {% endfor %}
     </div>

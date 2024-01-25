@@ -18,6 +18,19 @@ from sangeet.utils.decorators import *
 
 bp = Blueprint('creator', __name__, static_folder='static')
 
+@bp.route('/creator/dashboard/<int:creator_id>')
+@creator_required
+def dashboard(creator_id):
+    my_data = dict(
+        track = {'total_in_number': len(current_user.tracks)},
+        album = {'total_in_number': len(current_user.albums)},
+    )
+    template_data = dict(
+        my_data = my_data
+    )
+    return render_template('creator/dashboard.html', **template_data)
+
+
 @bp.route('/track/upload', methods=['GET', 'POST'])
 @creator_required
 def upload_track():
@@ -151,7 +164,8 @@ def modify_track(**kwargs):
         return redirect(request.referrer)
     else:
         return redirect(request.referrer)
-@bp.route('/album/create')
+    
+@bp.route('/album/create', methods=['GET', 'POST'])
 @creator_required
 def create_album():
     if request.method == 'POST':
@@ -169,12 +183,17 @@ def create_album():
         db.session.add(new_artist)
         db.session.add(new_album)
         db.session.commit()
+        return redirect(url_for('music.overview_of_category', category='album', category_id=new_album.id))
     query_result = db.session.execute(db.select(Genre)).scalars()
     genres = [genre for genre in query_result]
-    return render_template('creator/create_album.html', genres)
+    template_data = dict(
+        genres = genres
+    )
+    return render_template('creator/create_album.html', **template_data)
 
 
-@bp.route('/album/<action>', methods=['GET', 'POST'])    # any action related to albums which modifies it
+# any action related to albums which modifies it
+@bp.route('/album/<action>', methods=['GET', 'POST'])    
 @original_creator_required
 def album_actions(action):
     if request.method == 'POST':
@@ -208,109 +227,25 @@ def album_actions(action):
 def my_content(**kwargs):
     if kwargs.get('resource') == 'tracks':
         template_data = dict(
-            content = current_user,
-            tracks = refine_track_data(current_user.tracks),
+            tracks = refine_music_data(tracks=current_user.tracks)['tracks'],
+            music_collection = refine_music_data(music_collection=current_user)['music_collection'],
             main_category = 'creator'
         )
-        return render_template('creator/my_tracks.html', **template_data)
+        return render_template('music/real_music_overview_page.html', **template_data)
     elif kwargs.get('resource') == 'albums':
+        content_type='album'
+        music_data = refine_music_data_cards(content_type = content_type, owner_id=current_user.id)
         template_data = dict(
-            content = current_user,
-            main_category = 'creator' # for sending the user to show all page - link buildup
+            main_category = 'creator', # for sending the user to show all page - link buildup
+            content = music_data['content'],
+            links = music_data['links'],
+            title = 'My Albums',
+            content_type = content_type,
+            music_data = music_data
         )
+        return render_template('music/music_display_cards.html', **template_data)
     else:
         return redirect(request.referrer)
-
-
-@bp.route('/delete/track', methods=['GET', 'POST'])
-def delete_track():
-    if request.method == 'POST':
-        track_id = request.form.get('track_id')
-        if not track_id:
-            return redirect(request.referrer)
-        track_to_delete = db.session.get(Track, track_id)
-        if track_to_delete:
-            try:
-                track_name = track_to_delete.name
-                db.session.delete(track_to_delete)
-                db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-                flash(f"Error deleting track: {str(e)}", 'error')
-        else:
-            flash("Not authenticated")
-    return redirect(request.referrer)
-
-@bp.route('/edit/track/<track_id>', methods=['GET', 'POST'])
-def edit_track(track_id):
-    existing_track = db.session.get(Track, track_id)
-    if request.method == 'POST':
-        track_title = request.form.get('song_title')
-        artist_name = request.form.get('artist_name')
-        genre_id = request.form.get('genre_id')
-        creator_id = request.form.get('creator_id')
-
-        if 'file' not in request.files:
-            return redirect(request.url)
-
-        file = request.files['file']
-
-        if file.filename == '':
-            return redirect(request.url)
-
-        if file:
-            file_name = secure_filename(file.filename)
-            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], file_name)
-
-            # create folder if it doesn't exist
-            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-            # Save file to the file system
-            file.save(file_path)
-
-            # update information in the database
-            existing_track.name = request.form.get('song_title')
-            existing_track.artist_name = request.form.get('artist_name')
-            existing_track.genre_id = request.form.get('genre_id')
-            existing_track.creator_id = request.form.get('creator_id')
-            existing_track.file_name = request.form.get('file_name')
-            existing_track.file_path = request.form.get('file_path')            
-            db.session.commit()
-            return redirect(request.referrer)
-        else:
-            flash('Failed', 'error')
-            return redirect(request.url)
-        
-    # provide genres to select from
-    genres = db.session.execute(db.select(Genre)).scalars()
-    genres = [genre for genre in genres]
-
-    # return render_template('creator/edit_track.html', genres=genres, existing_track=existing_track)
-    return track_id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

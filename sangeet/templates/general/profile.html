@@ -8,14 +8,17 @@
 <div class="container row mt-2">
     <div class="col-9 bg-danger-subtle">
         <ul class="list-unstyled m-5">
-            <li class="h2">
+            <li class="h3">
                 Username - {{current_user.user_name}}
             </li>
-            <li class="h2">
+            <li class="h3">
                 Name - {{current_user.first_name}} {{current_user.last_name}}
             </li>
-            <li class="h2">
+            <li class="h3">
                 User ID - {{current_user.id}}
+            </li>
+            <li class="h3">
+                Role - {{current_user.role}}
             </li>
         </ul>
     </div>
@@ -23,15 +26,9 @@
         {% if current_user.profile_pic_src %}
             <img class="big-profile-picture" src="../../static/user_data/profile_picture/{{current_user.id}}.jpg" alt="Profile Picture">
         {% else %}
-            <svg version="1.1"
-            width="40" height="40"
-            xmlns="http://www.w3.org/2000/svg">
-            
-            <circle cx="20" cy="20" r="20" fill="green" />
-            
-            <text x="20" y="30" font-size="30" text-anchor="middle" fill="white">{{current_user.first_name[0].upper()}}</text>
-            
-            </svg>
+        <div>
+            {% include "general/user_profile_pic.svg" %}
+        </div>
         {% endif %}
     </div>
 </div>

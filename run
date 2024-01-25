@@ -3,15 +3,27 @@
 # activate virtual environment
 if [ -d ".sangeet_app_venv" ]; then
 	source .sangeet_app_venv/bin/activate
-	echo "Virtual environment enabled"
+	echo "======> Virtual environment enabled"
 	pip freeze > requirements.txt
 	# set environment variables
-	echo "setting environment variables"
+	echo "======> setting environment variables"
 	# this FLASK_APP variable will be used to run the app
 	export FLASK_APP=sangeet
-	echo "Starting the application Sangeet"
-	flask run --debug
+	
+	# now check what has to be done whether to open the shell or run the application
+	if [ -z "$1" ]; then
+		echo "======> Starting the application Sangeet"
+		flask run --debug
+	elif [ "$1" == 'public' ];then
+		echo "======> Starting the application Sangeet as Public. Any can access it on the internet"
+		export FLASK_RUN_PORT=5001
+		export FLASK_RUN_HOST=0.0.0.0
+		flask run
+	elif [ "$1" == 'shell' ]; then
+		echo "======> Entering Flask shell"
+		flask shell
+	fi
 else
-	echo "No virtual environment set up. Please run setup first"
+	echo "======> No virtual environment set up. Please run setup first"
 fi
 

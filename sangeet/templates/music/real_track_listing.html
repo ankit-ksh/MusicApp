@@ -10,12 +10,12 @@
     {{general_macros.submit_form_icon_GET("bi-pencil hidden-element", data={'track_id':track.id}, url="/track/edit")}}
     {{general_macros.submit_form_icon_GET("bi-trash hidden-element", data={'track_id':track.id}, url="/track/delete")}}
 {% elif music_access_level == 'admin' %}
-    {% if single_track_data.get('is_flagged') %}
-        {{general_macros.submit_form_icon_POST("bi-flag-fill", data={'track_id':track.id}, url="/test")}}
+    {% if single_track_data.get('track').is_flagged %}
+        {{general_macros.submit_form_icon_GET("bi-flag-fill", data={'item_id':track.id}, url="/admin/unflag/track")}}
     {% else %}
-        {{general_macros.submit_form_icon_POST("bi-flag hidden-element", data={'track_id':track.id}, url="/test")}}
+        {{general_macros.submit_form_icon_GET("bi-flag hidden-element", data={'item_id':track.id}, url="/admin/flag/track")}}
     {% endif %}
-    {{general_macros.submit_form_icon_POST("bi-trash hidden-element", data={'track_id':track.id}, url="/test")}}
+    {{general_macros.submit_form_icon_GET("bi-trash hidden-element", data={'item_id':track.id}, url="/admin/delete/track")}}
 {% endif %}
 
 {% endblock %}

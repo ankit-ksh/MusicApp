@@ -34,7 +34,7 @@ def creator_required(f):
         if (current_user.role == 'creator'):
             pass
         else:
-            return "You're not a creator. Abort with error"
+            return "You're not a creator."
         return f(**kwargs)
     return wrapper
 
@@ -48,7 +48,7 @@ def admin_required(f):
         if (current_user.role == 'admin'):
             pass
         else:
-            return "You're not an Admin. Abort with error"
+            return "You're not an Admin."
         return f(**kwargs)
     return wrapper
 

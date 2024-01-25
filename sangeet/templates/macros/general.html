@@ -1,9 +1,9 @@
-{% macro submit_form_button_POST(label, data, url, color) %}
+{% macro submit_form_button_POST(label, data, url, color, size) %}
     <form action="{{url}}" method="post">
     {% for entry in data %}
             <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
     {% endfor %}
-    <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
+    <button class="btn btn-{{size}} btn-{{color}}" type="submit">{{label}}</button>
     </form>
 {% endmacro %}
 
@@ -20,12 +20,12 @@
 
 
 
-{% macro submit_form_button_GET(label, data, url, color) %}
+{% macro submit_form_button_GET(label, data, url, color, size) %}
     <form action="{{url}}" method="get">
     {% for entry in data %}
             <input type="hidden" name="{{entry}}" value="{{ data[entry] }}">
     {% endfor %}
-    <button class="btn btn-sm btn-{{color}}" type="submit">{{label}}</button>
+    <button class="btn btn-{{size}} btn-{{color}}" type="submit">{{label}}</button>
     </form>
 {% endmacro %}
 

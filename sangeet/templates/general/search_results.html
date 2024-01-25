@@ -1,0 +1,54 @@
+{% extends appropriate_layout %}
+{% from 'macros/general.html' import submit_form_icon_POST %}
+{% from 'macros/general.html' import submit_form_button_GET %}
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/music_listing_pages.css">
+{% endblock %}
+
+{% block main %}
+
+{# Track search results #}
+<div style="min-height: 15rem;" class="container mt-5 mb-3 pt-3 pb-2 border border-1 rounded-2 border">
+    <div class="nav nav-tabs m-1">
+        <h2>
+            Search results for "{{query_term}}" in Tracks
+            {% if filtered_by %}
+                - {{filtered_by}}
+            {% endif %}
+        </h2>
+            {% include 'general/filter_search_results.html' %}
+    </div>
+    {% if tracks %}
+        {% for single_track_data in tracks %}
+            {% set track = single_track_data['track'] %}
+            {% include track_listing_template %}
+        {% endfor %}
+    {% else %}
+        <div class="lead text-center mt-5" style="min-height: 5rem;">
+            No Tracks
+        </div>
+    {% endif %}
+</div>
+
+
+{# Album search results #}
+<div style="min-height: 15rem;" class="container mt-5 mb-3 pt-3 pb-2 border border-1 rounded-2 border">
+    <div class="nav nav-tabs m-1">
+        <h2>Search results for "{{query_term}}" in Albums</h2>
+    </div>
+    {% if album_results %}
+        {% set music_data = album_results %}
+        {% include 'music/music_display_cards.html' %}
+    {% else %}
+        <div class="lead text-center mt-5" style="min-height: 5rem;">
+            No Albums
+        </div>
+    {% endif %}
+</div>
+ 
+
+
+
+
+{% endblock %}
+

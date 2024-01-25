@@ -6,12 +6,15 @@
     <link rel="stylesheet" href="/static/css/music_listing_pages.css">
 {% endblock %}
 
+{% set content = music_collection['content'] %}
+
+
 {% block main %}
 
 <div class="container">
     <div class="row justify-content-center align-items-center border border-2 rounded-2 bg-success-subtle" style="height: 350px;">
         <div class="col-3 text-center">
-            <img src="../../static/images/icons/adele.jpg" onerror="this.src='../../static/images/icons/alternate.avif'" style="width: 250px; height:250px; border-radius:5px;" alt="Artist Image">
+            <img src="{{content.cover_image_path}}" onerror="this.src='/static/sangeet_data/onerror_images/'+'{{content.__tablename__}}'+'_cover.png'" style="width: 250px; height:250px; border-radius:5px;" alt="Artist Image">
         </div>
         <div class="col">
             <div class="h2">
@@ -36,17 +39,21 @@
 
 <div class="container mt-5 mb-3 pt-3 pb-2 border border-1 rounded-2 border">
     <div class="nav nav-tabs m-1">
-        <h2>Songs</h2>
+        <h2>Tracks</h2>
     </div>
-  
-    {% for single_track_data in tracks.values() %}
-        {% set track = single_track_data['track'] %}
-        {% include track_listing_template %}
-    {% endfor %}
-    <a style="width: 100px;" class="btn btn-success btn-sm rounded-2 p-2 m-2 d-inline-block text-decoration-none" href="/music/all/{{main_category}}/{{content.id}}">
-        Show all
-    </a>
-    
+    {% if tracks %}
+        {% for single_track_data in tracks %}
+            {% set track = single_track_data['track'] %}
+            {% include track_listing_template %}
+        {% endfor %}
+        <a style="width: 100px;" class="btn btn-success btn-sm rounded-2 p-2 m-2 d-inline-block text-decoration-none" href="/music/all/{{main_category}}/{{content.id}}">
+            Show all
+        </a>
+    {% else %}
+        <div class="lead text-center mt-5" style="min-height: 5rem;">
+            No Tracks
+        </div>
+    {% endif %}
 </div>
 {% block any_relevant_things %}{% endblock %}
 

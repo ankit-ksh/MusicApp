@@ -21,7 +21,11 @@
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
+	:hover{
+		cursor: pointer;
+	}
 }
+
 
 .text-area{
 	height: 503px;
@@ -43,4 +47,5 @@
 .dropdown-toggle::after {
 	display: none;
 }
+
 

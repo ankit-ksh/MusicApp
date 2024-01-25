@@ -1,0 +1,25 @@
+{% extends appropriate_layout %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/player.css">
+{% endblock %}
+{% block extra_js %}
+    <script src="/static/js/player.js"></script>
+{% endblock %}
+
+{% block main %}
+<div class="container row " style="min-height: 200px;">
+    <div class="col-6 text-center">
+        <audio class="d-none" id="audio-player" controls>
+            <source src="{{ url_for('music.server', track_id=track.id) }}" type="audio/mp3" id="audio-source">
+            Your browser does not support the audio element.
+        </audio>
+        <audio controls src="{{ url_for('music.server', track_id=track.id) }}"></audio>    
+    </div>
+    <div col-md-6>
+        hello
+        <textarea style="height: 500px;" class="form-control pre-scrollable text-break" readonly>{{track.lyrics[0].lyrics}}</textarea>
+    </div>
+    </div>
+</div>
+    
+{% endblock %}
