@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, redirect, render_template, request, session, url_for, flash, send_from_directory, current_app
+    Blueprint, redirect, render_template, request, session, url_for, flash, send_from_directory, current_app, abort
 )
 import os
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -15,21 +15,6 @@ from sangeet.utils.general import *
 
 
 bp = Blueprint('music', __name__, url_prefix='/music')
-
-def query_a_table(info_dict):   # function for showing any content overview and redirecting to a page with all entries by just taking a categories dictionary
-    content = {}
-    content['title'] = info_dict['title']
-    table = info_dict['table']
-    filter_by = info_dict.get('filter_by', None)
-    value = info_dict.get('value', None)
-    if (filter_by == 'all'):                 # If its the case of returning all items from a table
-        query_result = db.session.execute(db.select(table)).scalars()
-    else:           # both of the above and below queries are achiveing case insensitive matching, but in a different way
-        query_result = db.session.execute(db.select(Track).where(db.func.lower(getattr(table, filter_by)).ilike(f"{value.lower()}"))).scalars()
-    query_result = [result for result in query_result]
-    content['items'] = query_result
-    return content
-
 
 # all playlists, albums or genres, any resource. It can even be all users for admin's info
 @bp.route('/all/<content_type>')
@@ -63,10 +48,10 @@ def overview_of_category(category, category_id):
             music_collection=refine_music_data(music_collection=content)['music_collection'],
             main_category = category,
             )
-        return render_template('music/real_music_overview_page.html', **template_data)
-            
+        return render_template('music/real_music_overview_page.html', **template_data)            
 
-# show all items of a category
+
+# show all tracks of a category
 @bp.route('/all/<category>/<category_id>')
 @login_required
 def all_content_of_category(category, category_id):
@@ -98,4 +83,12 @@ def server(track_id):
 @bp.route('/player/<int:track_id>')
 def player(track_id):
     track = db.session.get(Track, track_id)
-    return render_template('music/player.html', track=track, lyrics=track.lyrics)
+    track_data = extract_track_data(track)
+    if track:
+        lyrics=track_data['english_lyrics']
+        if not lyrics:
+            lyrics = 'Lyrics Not available'
+        return render_template('music/player.html', track=track, lyrics=lyrics)
+    else:
+        message = 'Track not available'
+        return render_template('music/player.html', message=message)

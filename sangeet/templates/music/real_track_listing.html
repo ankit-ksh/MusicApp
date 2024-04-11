@@ -7,6 +7,9 @@
 {% set music_access_level = single_track_data['track_listing_type']['role'] %}
 
 {% if music_access_level == 'creator' %}
+    {% if single_track_data.get('track').is_flagged %}
+        <i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
+    {% endif %}
     {{general_macros.submit_form_icon_GET("bi-pencil hidden-element", data={'track_id':track.id}, url="/track/edit")}}
     {{general_macros.submit_form_icon_GET("bi-trash hidden-element", data={'track_id':track.id}, url="/track/delete")}}
 {% elif music_access_level == 'admin' %}

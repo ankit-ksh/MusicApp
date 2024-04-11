@@ -247,33 +247,3 @@ def my_content(**kwargs):
     else:
         return redirect(request.referrer)
 
-
-
-
-
-
-
-
-# @bp.route('/delete/album', methods=['GET', 'POST'])
-# def delete_album():
-#     if request.method == 'POST':
-#         album_id = request.form.get('album_id')
-#         if not album_id:
-#             flash("Invalid Request", 'error')
-#             return redirect(request.base_url)
-#         album_to_delete = db.session.get(Album, album_id)
-#         if album_to_delete and album_to_delete.creator_id == current_user.id:
-#             try:
-#                 album_name = album_to_delete.name
-#                 db.session.delete(album_to_delete)
-#                 db.session.commit()
-#                 flash(f"album Deleted : {album_name}", 'success')
-#                 return redirect(request.base_url)
-#             except Exception as e:
-#                 db.session.rollback()
-#                 flash(f"Error deleting album: {str(e)}", 'error')
-#                 return redirect(request.base_url)
-#         else:
-#             flash("Not authenticated")
-#             return redirect(request.base_url)
-#     return redirect(url_for('creator.my_albums'))

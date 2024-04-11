@@ -1,14 +1,15 @@
-from pydub.utils import mediainfo
+from flask import Flask, request
+from flask_restful import Resource, Api
+app = Flask(__name__)
+api = Api(app)
+todos = {}
+class TodoSimple(Resource):
+    def get(self, todo_id):
+        return {todo_id: todos.get(todo_id)}
+    def put(self, todo_id):
+        todos[todo_id] = request.form['data']
+        return {todo_id: todos.get(todo_id)}
+api.add_resource(TodoSimple, '/<string:todo_id>')
 
-
-def get_file_duration(file):
-    file_info = mediainfo(file)
-    total_seconds = float(file_info.get('duration'))
-    minutes = int(total_seconds//60)
-    seconds = int(total_seconds%60)
-    answer = f"{minutes}min {seconds}s"
-    print(answer)
-    
-file_path = '/home/ankit/Music/Hothon Se Chhu Lo Tum.mp3'
-
-get_file_duration(file_path)
+if __name__ == '__main__':
+    app.run(debug=True)

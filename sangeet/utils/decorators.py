@@ -5,6 +5,26 @@ from flask_login import current_user, login_required
 from sangeet.extensions import db
 from sangeet.models import *
 
+
+def that_user_required(f): # eg for making a user creator. In cases where the actual creator is required
+    @wraps(f)
+    def wrapper(**kwargs):
+        if (current_user.is_authenticated):
+            pass
+        else:
+            return current_app.login_manager.unauthorized()
+        # which user id the user is trying to modify the information for
+        a = kwargs.get('user_id')
+        b = request.form.get('user_id')
+        c = request.form.get('user_id')
+        user_id = a if a is not None else (b if b is not None else c)
+        user = db.session.get(User, user_id)
+        if (user is not None) and (user_id == current_user.id):
+            return f(**kwargs)
+        else:
+            return abort(404)
+    return wrapper
+
 def playlist_curator_required(f):   # for playlists, checking if the user is actual curator
     @wraps(f)
     def wrapper(**kwargs):
@@ -13,9 +33,10 @@ def playlist_curator_required(f):   # for playlists, checking if the user is act
         else:
             return current_app.login_manager.unauthorized()
         # getting the data about playlist being tried to modify
-        playlist_id = kwargs.get('playlist_id')
-        playlist_id = request.form.get('playlist_id', playlist_id)
-        playlist_id = request.args.get('playlist_id', playlist_id)
+        a = kwargs.get('playlist_id')
+        b = request.form.get('playlist_id')
+        c = request.form.get('playlist_id')
+        playlist_id = a if a is not None else (b if b is not None else c)
         playlist = db.session.get(Playlist, playlist_id)
         # checking if playlist exists, and if it does, check if he's the owner then only return success otherwise error
         if (playlist is not None) and (playlist.curator_id == current_user.id):

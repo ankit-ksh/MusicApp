@@ -1,0 +1,65 @@
+{% extends 'general/home.html' %}
+<!-- Testing the homepage and other listings -->
+{% block extra_css %}
+<style>
+
+.album-card {
+    height: 270px;
+}
+.square-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Set padding-bottom to the same value as width to maintain a square aspect ratio */
+    overflow: hidden; /* Ensure content doesn't overflow the container */
+}
+
+.square-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+.square-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the entire container */
+  }
+.hidden-element {
+    display: none;
+}
+
+.album-card img:hover .hidden-element {
+    display: block;
+}
+</style>
+{% endblock extra_css %}
+
+{% block main %}
+
+
+<div class="container bg-success-subtle">
+    <div class="h2">Recommended</div>
+    <div class="row">
+        {% for i in range(6) %}
+            <div class="col bg-primary-subtle album-card border border-black">
+                <div class="square-container">
+                    <div class="square-content">
+                    <img src="../../static/images/headphones-cinematic.avif" alt="Square Album Image" class="square-image rounded-2">
+                    <div class="bg-primary">
+                        Hello
+                    </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="h6">Rolling in the deep</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}

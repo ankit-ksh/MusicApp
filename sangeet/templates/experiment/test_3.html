@@ -1,0 +1,81 @@
+{% extends appropriate_layout %}
+{% block main %}
+
+{{current_user.playlists}}
+{% for p in current_user.playlists %}
+{{p.name}}
+{% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Horizontal Music Player</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .artist-container {
+      display: flex;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .artist-card {
+      flex: 0 0 auto;
+      width: 200px; /* Adjust as needed */
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .pagination {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 class="mt-4 mb-4 hstack">Horizontal Music Player</h2>
+    {% for i in range(6) %}
+  <div class="artist-container">
+    <div class="artist-card">
+      <img src="artist1.jpg" class="img-fluid" alt="Artist 1">
+      <div class="card-body">
+        <h5 class="card-title">Artist 1</h5>
+      </div>
+    </div>
+    <!-- Add more artist cards as needed -->
+
+  </div>
+  {% endfor %}
+
+  <div class="pagination-container">
+    <nav aria-label="Artist Pagination">
+      <ul class="pagination">
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+{% endblock %}

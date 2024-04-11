@@ -4,5 +4,32 @@
 
 <!-- Dropdown of user profile photo -->
 {% block role_specific_info %}
-<li><a class="dropdown-item" href="/user/become-creator/{{current_user.id}}">Register as Creator</a></li>
+
+<!-- Button trigger modal -->
+<li class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#roleSwitchModal">Register as Creator</li>
+
+{% endblock %}
+
+
+
+{% block other_html %}
+{{ super() }}
+<!-- Modal for confirmation of role change-->
+<div class="modal fade" id="roleSwitchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5">Are you sure?</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Get access to the creative world of Sangeet studio.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a href="/change_role/user/creator/{{current_user.id}}" type="button" class="btn btn-danger">Yes, I'm sure.</a>
+        </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

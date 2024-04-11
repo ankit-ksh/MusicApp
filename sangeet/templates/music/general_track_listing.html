@@ -1,4 +1,3 @@
-
 <div class="row gap-3 justify-content-evenly align-items-center p-2 bordered rounded m-1 song-row">
     <div class="custom-index-col">
         <span class="to-be-hidden-element">
@@ -25,7 +24,10 @@
     </div>
     <div class="col-2 hstack gap-3 text-center">
         <div>
-            {{submit_form_icon_POST("bi-star hidden-element", data={'track_id':1}, url="/test")}}
+            {{submit_form_icon_POST("bi-hand-thumbs-up hidden-element", data={'track_id':1}, url="/test")}}
+        </div>
+        <div>
+            {{submit_form_icon_POST("bi-hand-thumbs-down hidden-element", data={'track_id':1}, url="/test")}}
         </div>
         <!-- User specific options will be included here -->
         {% block user_specific_options %}{% endblock %}
@@ -53,11 +55,11 @@
 </div>
 
 <!-- Modal to save the playlist dropdown-item -->
-<div class="modal" id="modal-for-pl-{{track.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="modal-for-pl-{{track.id}}" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
         <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Save to playlist</h1>
+        <h1 class="modal-title fs-5" id="SavePlaylistModalLabel">Save to playlist</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

@@ -7,19 +7,50 @@
 {% endblock %}
 
 {% block main %}
-<div class="container row " style="min-height: 200px;">
-    <div class="col-6 text-center">
-        <audio class="d-none" id="audio-player" controls>
-            <source src="{{ url_for('music.server', track_id=track.id) }}" type="audio/mp3" id="audio-source">
-            Your browser does not support the audio element.
-        </audio>
-        <audio controls src="{{ url_for('music.server', track_id=track.id) }}"></audio>    
-    </div>
-    <div col-md-6>
-        hello
-        <textarea style="height: 500px;" class="form-control pre-scrollable text-break" readonly>{{track.lyrics[0].lyrics}}</textarea>
-    </div>
-    </div>
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 200px;">
+        <div class="col-6 text-center">
+            <audio class="d-none" id="audio-player" controls>
+                <source src="{{ url_for('music.server', track_id=track.id) }}" type="audio/mp3" id="audio-source">
+                Your browser does not support the audio element.
+            </audio>
+            <audio controls src="{{ url_for('music.server', track_id=track.id) }}"></audio>    
+        </div>
+        <div class="col-6" id="track-details-nav">
+            <ul class="nav nav-underline" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active text-black" id="lyrics-tab" data-bs-toggle="tab" data-bs-target="#lyrics-tab-pane" type="button">Lyrics</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link text-black" id="profile-tab" data-bs-toggle="tab" data-bs-target="#track-details-tab-pane" type="button">Track details</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-2" id="myTabContent">
+                <div class="tab-pane show active" id="lyrics-tab-pane" tabindex="0">
+                    <textarea style="height: 100%; min-height:500px;" class="form-control pre-scrollable text-break bg-secondary-subtle" readonly>{{lyrics}}</textarea>
+                </div>
+                <div class="tab-pane" id="track-details-tab-pane">
+                    <ul style="height: 100%; min-height:500px;" class="pre-scrollable text-break bg-secondary-subtle rounded-3">
+                        <div class="h2 text-center p-3">{{track.name}}</div>
+                        <li>
+                            Artist - {{track.artist_name}}
+                        </li>
+                        <li>
+                            Album - {{track.album}}
+                        </li>
+                        <li>
+                            Genre - {{track.genre.name}}
+                        </li>
+                        <li>
+                            Rating - {{track.rating}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>    
 </div>
     
 {% endblock %}
+

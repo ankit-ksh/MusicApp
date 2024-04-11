@@ -59,42 +59,60 @@ def get_track_listing_type(track, **kwargs):
             track_listing_type['page_type'] = 'album'
     return track_listing_type
 
+def extract_track_data(track):
+    single_track_data = {}
+    single_track_data['track_id'] = track.id
+    single_track_data['track'] = track
+    try:
+        single_track_data['english_lyrics'] = track.lyrics[0].lyrics
+    except:
+        single_track_data['english_lyrics'] = ''
+    return single_track_data
 
-def refine_music_data(**kwargs):    # make the tracks list suitable for sending it to the template for getting it rendered
-    music_page_data = {}    # a dictionary of two dictionary providing data about tracks listing and the collection itself, about the permissions of the user etc    
+
+# for storing data of any spcific collection mixed with the current user logged in
+# to give the authorized person the ability to modify it
+def extract_music_collection_data(music_collection):
+    if not music_collection:
+        return None
+    music_collection_data = dict(
+        content = music_collection,
+        type = music_collection.__tablename__,
+        name = music_collection.name,
+        is_user_owner = False
+    )
+    if (music_collection.__tablename__ == 'playlist') and (music_collection.curator_id == current_user.id):
+        music_collection_data['is_user_owner'] = True
+    elif (music_collection.__tablename__ == 'album'):
+        if music_collection.creator_id == current_user.id:
+            music_collection_data['is_user_owner'] = True
+    elif (music_collection.__tablename__ == 'creator'):
+            music_collection_data['is_user_owner'] = True
+    return music_collection_data
+    
+# make the tracks list suitable for sending it to the template for getting it rendered
+# a dictionary of two dictionary providing data about tracks listing and the collection itself, about the permissions of the user etc    
+# hide the track if the current user is just a simple user and the track is flagged
+# ------------- depends on the function extract_music_collection_data -------------------
+def refine_music_data(**kwargs):
+    music_page_data = {}
     # getting track data in list of dictionaries if the variable tracks exists in kwargs
     tracks = kwargs.get('tracks', None)
     if tracks:
         track_data = []
         for track in tracks:
-            if (track.is_flagged == True) and (current_user.role == 'user'):
-                pass
-            else:
-                single_track_data = dict(
-                    track_id = track.id,
-                    track = track,
-                    track_listing_type = get_track_listing_type(track, **kwargs),
-                )
-                track_data.append(single_track_data)
+            if (track.is_flagged == True): # don't show the user any flagged song, but the original creator and admins can see it   
+                if (current_user.role == 'user') or (current_user.role == 'creator' and track.creator_id != current_user.id):
+                    continue    # don't include the current track if the above if condition evaluates to true
+            single_track_data = extract_track_data(track)
+            single_track_data['track_listing_type'] = get_track_listing_type(track, **kwargs)
+            track_data.append(single_track_data)
+            print(single_track_data.get('track').name)
         music_page_data['tracks'] = track_data
 
     # if music collection variable exists then provide help to the template in providing options based on that
     music_collection =  kwargs.get('music_collection', None)
-    if music_collection:
-        music_collection_data = dict(
-            content = music_collection,
-            type = music_collection.__tablename__,
-            name = music_collection.name,
-            is_user_owner = False
-        )
-        if (music_collection.__tablename__ == 'playlist') and (music_collection.curator_id == current_user.id):
-            music_collection_data['is_user_owner'] = True
-        elif (music_collection.__tablename__ == 'album'):
-            if music_collection.creator_id == current_user.id:
-                music_collection_data['is_user_owner'] = True
-        elif (music_collection.__tablename__ == 'creator'):
-                music_collection_data['is_user_owner'] = True
-        music_page_data['music_collection'] = music_collection_data
+    music_page_data['music_collection'] = extract_music_collection_data(music_collection)
     return music_page_data
 
 # grouping any large list into smaller lists of n size

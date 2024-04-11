@@ -12,7 +12,8 @@ from flask_login import (
 )
 from sangeet.models import *
 from sangeet.utils.general import *
-
+from sangeet.utils.variables import *
+from sangeet.utils.decorators import *
 bp = Blueprint('general', __name__)
 
 
@@ -58,22 +59,43 @@ def library():
 def profile():
     return render_template('general/profile.html')
 
-@bp.route('/user/become-creator/<int:user_id>')
+@bp.route('/notifications')
 @login_required
-def become_creator(**kwargs):
+def notifications():
+    user_id = request.args.get('user_id')
+    return render_template('general/notifications.html')
+
+
+@bp.route('/change_role/<previous_role>/<final_role>/<int:user_id>')
+@that_user_required
+def change_role(**kwargs):
     user_id = kwargs.get('user_id')
-    if user_id:
-        user = db.session.get(User, user_id)
-        new_creator = Creator(user_name = user.user_name, first_name = user.first_name, last_name=user.last_name, password=user.password)
-        db.session.delete(user)
-        db.session.commit()
-        db.session.add(new_creator)
-        db.session.commit()
-    template_data = dict(
-        message = "You've succesfully registered as a creator. Please login again",
-        message_type = 'success'
-    )
-    return redirect(url_for('general.profile'))
+    previous_role = kwargs.get('previous_role')
+    final_role = kwargs.get('final_role')
+    ## If the user is going from a user to a creator
+    if (previous_role == 'user') and (final_role == 'creator'):
+        old_account = db.session.get(User, user_id)
+        new_account = Creator(user_name = old_account.user_name, first_name = old_account.first_name, last_name=old_account.last_name, password=old_account.password)
+        ### Tranferring the data from old account to new account
+        new_account.playlists = old_account.playlists
+        template_data = dict(
+            # message = "You've succesfully registered as a creator. Please login again",
+            # message_type = 'success'
+        )
+    elif (previous_role == 'creator') and (final_role == 'user'):
+        old_account = db.session.get(Creator, user_id)
+        new_account = User(user_name = old_account.user_name, first_name = old_account.first_name, last_name=old_account.last_name, password=old_account.password)
+        ### Tranferring the data from old account to new account
+        new_account.playlists = old_account.playlists
+        template_data = dict(
+            # message = "You've succesfully registered as a creator. Please login again",
+            # message_type = 'success'
+        )
+    db.session.delete(old_account)
+    db.session.commit()
+    db.session.add(new_account)
+    db.session.commit()
+    return redirect(url_for('general.home'))
 
 
 @bp.route('/preferences')
@@ -134,14 +156,20 @@ def search():
     return render_template('general/search_results.html', **template_data)
 
 
-@bp.route('/test/<int:test_id>', methods=['GET', 'POST'])
-def test(test_id):
-    if test_id == 7:
-        return send_from_directory('/home/ankit/Music/', 'chori.mp3')
-    # return render_template('general/test.html', english_songs=english_songs)
-    # return render_template('admin/track_listing.html', english_songs=english_songs)
+@bp.route('/exp/<int:exp_id>', methods=['GET', 'POST'])
+def experiments(**kwargs):
+    exp_id = kwargs.get('exp_id')
     template_data = dict(
-        message = 'Hello',
-        track = db.session.get(Track, 28)
+        exp_id = exp_id
     )
-    return render_template(f'test/test_{test_id}.html', **template_data)
+    import os
+    abs_file_path = os.path.join(os.getcwd(), f'sangeet/templates/experiment/exp_{exp_id}.html')
+    file_path = f'sangeet/templates/experiment/exp_{exp_id}.html'
+    if not os.path.exists(abs_file_path):
+        new_exp_file = open(abs_file_path, 'w')
+        new_exp_file.write(experiment_boilerplate_text)
+        new_exp_file.close()
+    
+        return render_template(f'experiment/exp_{exp_id}.html', **template_data)
+    else:
+        return render_template(f'experiment/exp_{exp_id}.html', **template_data)

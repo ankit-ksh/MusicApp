@@ -1,0 +1,125 @@
+{% extends appropriate_layout %}
+
+{% block extra_js %}
+
+// Replace the song URLs with your local music file URLs
+const musicFiles = [
+    'song1.mp3',
+    'song2.mp3',
+    'song3.mp3'
+];
+
+let currentSongIndex = 0;
+let isPlaying = false;
+
+const audioPlayer = document.getElementById('audio-player');
+const playPauseBtn = document.getElementById('play-pause-btn');
+const songTitleElement = document.getElementById('song-title');
+const artistNameElement = document.getElementById('artist-name');
+
+function loadSong(index) {
+    audioPlayer.src = 'music/'+ musicFiles[index];
+    songTitleElement.textContent = `Song ${index + 1}`;
+    artistNameElement.textContent = 'Artist Name'; // Replace with actual artist name
+}
+
+function togglePlayPause() {
+    if (isPlaying) {
+        audioPlayer.pause();
+    } else {
+        audioPlayer.play();
+    }
+    isPlaying = !isPlaying;
+    playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
+}
+
+function playNextSong() {
+    currentSongIndex = (currentSongIndex + 1) % musicFiles.length;
+    loadSong(currentSongIndex);
+    if (isPlaying) {
+        audioPlayer.play();
+    }
+}
+
+function playPreviousSong() {
+    currentSongIndex = (currentSongIndex - 1 + musicFiles.length) % musicFiles.length;
+    loadSong(currentSongIndex);
+    if (isPlaying) {
+        audioPlayer.play();
+    }
+}
+
+// Event listeners
+playPauseBtn.addEventListener('click', togglePlayPause);
+document.getElementById('next-btn').addEventListener('click', playNextSong);
+document.getElementById('previous-btn').addEventListener('click', playPreviousSong);
+
+// Initial setup
+loadSong(currentSongIndex);
+
+{% endblock %}
+
+{% block extra_css %}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100vh;
+}
+
+.song-details {
+    text-align: center;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.control-btn {
+    margin: 8px;
+    padding: 8px;
+    font-size: 16px;
+    background-color: #1db954;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.control-btn:hover {
+    background-color: #25a05e;
+}
+
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div class="song-details">
+        <img src="https://i.scdn.co/image/ab67616d0000b2730b7cece3eba7e5b6aec0777a"/>
+        <h2 id="song-title">Play with Fire</h2>
+        <p id="artist-name">Artist Name</p>
+    </div>
+    <div class="controls">
+        <button id="previous-btn" class="control-btn">Previous</button>
+        <button id="play-pause-btn" class="control-btn">Play</button>
+        <button id="next-btn" class="control-btn">Next</button>
+    </div>
+</div>
+
+<audio id="audio-player" controls>
+    <source src="{{ url_for('music.server', track_id=track.id) }}" type="audio/mp3" id="audio-source">
+    Your browser does not support the audio element.
+</audio>
+
+<audio controls src="/home/ankit/Music/Ja Ja Ke Kahan Minnate Fariyad Karoge ｜ Kumar Sanu, Alka Yagnik ｜ Pyar Ka Rog 1994 Songs ｜ Ravi Behl [GuyJYIxMg0g].mp3"></audio>
+
+{% endblock %}

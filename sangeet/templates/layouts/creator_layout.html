@@ -4,7 +4,10 @@
 
 <!-- Dropdown of user profile photo -->
 {% block role_specific_info %}
-<li><a class="dropdown-item" href="#">Go Back as Normal User</a></li>
+
+<!-- Button trigger modal -->
+<li class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#roleSwitchModal">Go back as normal user</li>
+
 {% endblock %}
 
 
@@ -32,4 +35,28 @@
     </ul>
 </li>
 {% endblock extra_left_nav_options %}
+
+
+
+{% block other_html %}
+{{ super() }}
+<!-- Modal for confirmation of role change-->
+<div class="modal fade" id="roleSwitchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5">Are you sure?</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            All Songs, Albums uploaded by you will be deleted from the platform. Make sure you know exactly what are you doing.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a href="/change_role/creator/user/{{current_user.id}}" type="button" class="btn btn-danger">Yes, I'm sure.</a>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
