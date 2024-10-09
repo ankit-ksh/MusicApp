@@ -24,5 +24,14 @@ if [ -d ".sangeet_app_venv" ]; then
 		flask shell
 	fi
 else
-	echo "======> No virtual environment set up. Please run setup first"
+	echo "No virtual environment set up. Setting up Virtual environment. Please ensure Python and pip is installed"
+	python -m venv .sangeet_app_venv
+	echo
+	echo "Activating virtual environment"
+	source .sangeet_app_venv/bin/activate
+	echo
+	echo "Now installing all packages listed in requirements.txt"
+	pip3 install -r requirements.txt
+	echo
+	echo "All set up. Now run the script run to start the app"
 fi
